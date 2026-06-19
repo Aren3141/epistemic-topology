@@ -1,5 +1,6 @@
 import torch
 from transformer_lens import HookedTransformer
+from typing import List, Tuple
 
 class ResidualStreamExtractor:
     """
@@ -47,9 +48,33 @@ class ResidualStreamExtractor:
         
         return hidden_states
 
+def run_extraction() -> Tuple[List[torch.Tensor], List[int]]:
+    """
+    generates a small exploratory batch of tensors and labels for the phase 1 diagnostic.
+    """
+    # strictly bind to cpu to guarantee reproducible geometry
+    extractor = ResidualStreamExtractor(model_name="gpt2-small", device="cpu")
+    
+    # minimal sample data to test linear separability across regimes
+    prompts = [
+        "The capital of France is Paris.",         
+        "The capital of France is a spaceship.",   
+        "The weather today is fairly mild."        
+    ]
+    
+    # corresponding diagnostic labels
+    # 0: factual, 1: inconsistent, 2: neutral
+    labels = [0, 1, 2]
+    tensors = []
+    
+    for prompt in prompts:
+        tensors.append(extractor.extract_final_layer(prompt))
+        
+    return tensors, labels
+
 if __name__ == "__main__":
-    # assign the apple performance shader backend if local hardware supports it
-    target_device = "mps" if torch.backends.mps.is_available() else "cpu"
+    # strict cpu enforcement to prevent numerical drift
+    target_device = "cpu"
     
     extractor = ResidualStreamExtractor(model_name="gpt2-small", device=target_device)
     test_prompt = "The capital of France is Paris."
@@ -65,7 +90,7 @@ if __name__ == "__main__":
         
         # confirm our structural data grid aligns perfectly with expected architecture
         assert tensor_output.shape == (expected_seq_len, expected_d_model), "tensor footprint mismatch detected"
-        print(f"validation clean. shape array maps to sequence matrix matches.")
+        print("validation clean. shape array maps to sequence matrix matches.")
         
     except Exception as error:
         print(f"extraction loop failed to resolve: {error}")

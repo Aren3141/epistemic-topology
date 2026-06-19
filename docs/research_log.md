@@ -15,3 +15,17 @@ TDA relies on computing the Vietoris-Rips complex using exact pairwise distances
 
 **Resolution:**
 For the integrity of the research, computational speed should be sacrificed for absolute certainty and accuracy with the mathematical calculations. Moving into Phase 1, the architecture will be hardcoded to execute LLM inference strictly on the `cpu`. While this removes the advantage of the M3's GPU acceleration, the CPU backend guarantees mathematically correct tensor extraction, ensuring all observed topological features are genuine properties of the LLM's epistemic state rather than hardware-induced noise.
+
+## [2026-06-19] - Phase 1 Linear Baseline Completion
+- Implemented `pca_check.py` to ingest phase 0 extractions.
+- Strictly enforced CPU execution to guarantee numerical determinism.
+- Built a minimal pipeline to flatten `[sequence_length, d_model]` tensors into a unified token pool.
+- Added visual diagnostics and automated silhouette scoring for cluster validation.
+- Ready to execute on batch data to determine necessity of Phase 2 (Topology).
+
+### Phase 1 Results & Conclusion ([2026-06-19])
+- **Explained Variance (PC1, PC2):** 52.46%, 12.33%
+- **Silhouette Score:** -0.1099
+- **Interpretation:** The negative silhouette score indicates there to be a cluster overlap and entanglement in lower-dimensional linear space. While the first principal component captures significant variance, linear separation of the factual, inconsistent, and neutral regimes fails.
+- **Next Action:** These findings suggest linear geometry is insufficient. We proceed to Phase 2 to apply Topological Data Analysis (TDA), specifically persistent homology, to search for non-linear structural signatures.
+

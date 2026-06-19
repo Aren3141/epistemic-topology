@@ -76,3 +76,6 @@ Where $\gamma$ represents the matching bijection between diagram points.
 
 ### The Shuffled Null Distribution
 To validate our results, all Wasserstein distances are evaluated against a null distribution created by randomly shuffling the layer and token identities of our extracted tensors. If the distance measured between our true experimental blocks does not sit significantly outside this shuffled baseline, any observed $\beta_1$ loops must be categorised as statistical noise rather than genuine architectural properties.
+
+### Phase 1: Linear Baseline Validation
+We apply Principal Component Analysis (PCA) directly to the CPU-extracted residual streams. This phase is diagnostic. The results generated here are exploratory and do not prove causation. If the regimes (factual, inconsistent, neutral) separate cleanly in two dimensions, it suggests linear mechanisms comprise the representation. If they remain entangled, it is consistent with the hypothesis that higher-dimensional or topological manifolds are required to distinguish the epistemic states.
