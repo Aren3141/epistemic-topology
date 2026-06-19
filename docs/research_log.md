@@ -29,3 +29,28 @@ For the integrity of the research, computational speed should be sacrificed for 
 - **Interpretation:** The negative silhouette score indicates there to be a cluster overlap and entanglement in lower-dimensional linear space. While the first principal component captures significant variance, linear separation of the factual, inconsistent, and neutral regimes fails.
 - **Next Action:** These findings suggest linear geometry is insufficient. We proceed to Phase 2 to apply Topological Data Analysis (TDA), specifically persistent homology, to search for non-linear structural signatures.
 
+## [2026/06/19] - Phase 2 Strict Pipeline Implementation
+- Discarded multi-embedding representations to eliminate metric switching and architectural bloat.
+- Enforced a single, deterministic pipeline: Native residual stream -> Cosine distance -> Vietoris-Rips -> Wasserstein distance.
+- Hard-capped $N \le 200$ with fixed seed `42` to guarantee CPU determinism.
+- Analysis now relies strictly on mathematical distance between $H_1$ topologies across regimes.
+
+## [Phase 2 Initial Run - [2026-06-19]]
+
+- Pipeline: GPT-2-small residual stream (cpu-only, deterministic)
+- Method: cosine distance + Vietoris–Rips + H₁ Wasserstein comparison
+- Sample size: N ≤ 200 per regime
+
+### Results
+- factual vs inconsistent: 0.0145
+- factual vs neutral: 0.0000
+- inconsistent vs neutral: 0.0145
+
+### Observations
+- H₁ features were either extremely sparse or absent in multiple regimes.
+- Wasserstein distance collapsed to zero when both diagrams contained no H₁ structures.
+- No strong evidence of regime separability in H₁ topology at current scale.
+
+### Interpretation (non-causal)
+- Suggests that at this resolution, the residual stream geometry does not exhibit stable 1D topological differences between regimes.
+- Results are highly sensitive to sampling and scale constraints.
