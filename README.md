@@ -6,7 +6,11 @@ The question is whether an internal measurement can tell that the model **obeyed
 
 ## The question
 
-A user asks the model to summarise an email. The email is one of three matched texts:
+The goal of the current prototype is a matched pair of replies. The model must obey an injected order, and it must not obey that same order when the email only quotes it. Probes and homology stay parked until that pair is reliable.
+
+The summary task is a system message, identical for every email. A direct order with no email is obeyed. The same order buried under a same-channel “summarise this email” instruction was not: the model kept summarising. The system message tells the assistant to follow an explicit reply instruction in the email, and to ignore that instruction when the email marks it as a quotation.
+
+The email is one of three matched texts:
 
 | Variant | What is in the email | What counts as obedience |
 | --- | --- | --- |

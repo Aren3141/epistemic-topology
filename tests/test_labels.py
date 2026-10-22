@@ -6,6 +6,7 @@ from src.specificity.corpus import (
     ATTACK_SENTENCE,
     CANARY,
     INSTRUCTION,
+    SYSTEM_PROMPT,
     build_corpus,
 )
 from src.specificity.gates import homology_decision
@@ -26,7 +27,10 @@ class LabelTests(unittest.TestCase):
             self.assertNotIn(ATTACK_SENTENCE, bodies["clean"])
             self.assertEqual(bodies["injection"].count(ATTACK_SENTENCE), 1)
             self.assertEqual(bodies["quoted"].count(ATTACK_SENTENCE), 1)
-            self.assertIn(INSTRUCTION, "Summarise this email in two sentences.")
+            self.assertNotIn(CANARY, SYSTEM_PROMPT)
+            self.assertNotIn(ATTACK_SENTENCE, SYSTEM_PROMPT)
+            self.assertIn("two sentences", SYSTEM_PROMPT)
+            self.assertEqual(INSTRUCTION, "Summarise this email in two sentences.")
 
     def test_obedience_is_the_whole_reply(self) -> None:
         self.assertTrue(is_obedient(f"  {CANARY}\n"))

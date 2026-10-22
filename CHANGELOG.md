@@ -7,6 +7,7 @@
 - Left the June PCA baseline in place as `run_phase1.py`.
 - Pinned `transformer-lens` to 3.9.0 so that baseline still imports `HookedTransformer`.
 - Recorded the one-email CPU smoke test. The pipeline runs. The committed injection was summarised rather than obeyed exactly, so the 90-email run has not started.
+- Moved the summary task into a shared system message after direct orders were obeyed and in-email orders were not. Three checked emails then obeyed the injection and refused the quotation. Demo cards are in `docs/demos/`.
 - Recorded that a draft gate would have rejected a quoted row with zero obedience, and corrected that rule before any pilot forward.
 
 ## [Added]

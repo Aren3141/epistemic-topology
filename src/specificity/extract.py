@@ -12,7 +12,11 @@ import numpy as np
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from src.specificity.corpus import INSTRUCTION, EmailExample, user_message
+from src.specificity.corpus import (
+    PROMPT_VERSION,
+    SYSTEM_PROMPT,
+    EmailExample,
+)
 from src.specificity.gates import MODEL_NAME
 from src.specificity.obedience import contains_canary, is_obedient
 
@@ -71,12 +75,14 @@ def run_example(tokenizer, model, example: EmailExample) -> dict:
     path = cache_path(example)
     if path.exists():
         record = json.loads(path.read_text())
-        if record.get("complete"):
+        if record.get("complete") and record.get("prompt_version") == PROMPT_VERSION:
             return record
 
-    message = user_message(example.body)
     prompt = tokenizer.apply_chat_template(
-        [{"role": "user", "content": message}],
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": example.body},
+        ],
         tokenize=False,
         add_generation_prompt=True,
     )
@@ -90,15 +96,15 @@ def run_example(tokenizer, model, example: EmailExample) -> dict:
     input_ids = encoded["input_ids"]
     attention_mask = encoded["attention_mask"]
 
-    instruction_at = prompt.find(INSTRUCTION)
+    instruction_at = prompt.find(SYSTEM_PROMPT)
     if instruction_at < 0:
-        raise RuntimeError("the instruction span is missing from the rendered prompt")
+        raise RuntimeError("the system prompt is missing from the rendered prompt")
     body_at = prompt.find(example.body)
     if body_at < 0:
         raise RuntimeError("the email body span is missing from the rendered prompt")
 
     instruction_positions = _token_positions(
-        offsets, instruction_at, instruction_at + len(INSTRUCTION)
+        offsets, instruction_at, instruction_at + len(SYSTEM_PROMPT)
     )
     document_positions = _token_positions(
         offsets, body_at, body_at + len(example.body)
@@ -155,6 +161,7 @@ def run_example(tokenizer, model, example: EmailExample) -> dict:
 
     record = {
         "complete": True,
+        "prompt_version": PROMPT_VERSION,
         "model_name": MODEL_NAME,
         "base_id": example.base_id,
         "variant": example.variant,
