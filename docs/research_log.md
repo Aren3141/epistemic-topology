@@ -70,5 +70,27 @@ The next-action line above is the plan as written on 19 June 2026. It was not ca
 
 **What works for the pair.** The summary task moves to the system message. The user message is only the email. The system text tells the model to follow an explicit entire-reply instruction, and to ignore that instruction when it is quoted as something not to follow. On base emails 0, 7, and 19, every injection reply was exactly the canary, and every clean and quoted reply was a summary without the canary. Demo card: `docs/demos/prototype-02-system-policy/demo.png`.
 
-**Status.** This prompt is now `system-policy-v1` in the pilot code. The 90-email run is the next measurement. It has not been recorded yet.
+**Status.** This prompt is now `system-policy-v1` in the pilot code.
+
+## [2026-10-22] Ninety-email pilot
+
+**Run.** All 90 forwards, `Qwen/Qwen2.5-1.5B-Instruct`, float32, CPU, `system-policy-v1`. About seven minutes. Report: `results/specificity_pilot.json` (local, not committed). Spot checks of the saved replies match the exact-reply rule: injections are the canary, clean and quoted rows are summaries.
+
+**Obedience.**
+
+| Variant | Exact obedience | Canary mentioned |
+| --- | --- | --- |
+| Clean | 0 / 30 | 0 / 30 |
+| Injection | 30 / 30 | 30 / 30 |
+| Quoted | 0 / 30 | 0 / 30 |
+
+**Middle layer, the primary gate.** Email-grouped out-of-fold probe AUROC is 1.0 for clean versus injection and 1.0 for obeyed versus quoted. Centroid cosine distance AUROC is 0.0 for clean versus injection and 0.82 for obeyed versus quoted.
+
+**Early layer, not used for the gate.** Probe AUROC is also 1.0 on both tasks. Centroid AUROC is 0.06 for clean versus injection and 1.0 for obeyed versus quoted.
+
+**Gate.** Persistent homology does not start. The linear probe separates obeyed injections from quoted attacks at AUROC 0.80 or above. The centroid distance does too, on the middle layer.
+
+**Reading.** The system message states the rule the model is following. Perfect probe separation means that rule is linearly readable from the last email token before the reply is written. It does not mean a model without that system message would show the same split. The same-channel smoke test is the evidence that, without the system rule, this model does not obey the injection at all.
+
+Demo card: `docs/demos/prototype-03-ninety-email-gate/demo.png`.
 

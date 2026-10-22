@@ -8,6 +8,7 @@
 - Pinned `transformer-lens` to 3.9.0 so that baseline still imports `HookedTransformer`.
 - Recorded the one-email CPU smoke test. The pipeline runs. The committed injection was summarised rather than obeyed exactly, so the 90-email run has not started.
 - Moved the summary task into a shared system message after direct orders were obeyed and in-email orders were not. Three checked emails then obeyed the injection and refused the quotation. Demo cards are in `docs/demos/`.
+- Ran all 90 emails. Every injection was an exact canary reply and no quoted email was. The middle-layer linear probe AUROC is 1.0, so persistent homology stays off.
 - Recorded that a draft gate would have rejected a quoted row with zero obedience, and corrected that rule before any pilot forward.
 
 ## [Added]
