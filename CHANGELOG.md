@@ -1,5 +1,13 @@
 # Changelog
 
+## [2026-10-22]
+- Replaced the active question with the specificity pilot: obeyed injection versus the same sentence quoted as a security example.
+- Added the matched 90-email corpus, the exact-reply rule, CPU extraction for `Qwen/Qwen2.5-1.5B-Instruct`, and an email-grouped linear probe plus centroid distance.
+- Pre-registered the persistent-homology gate in `src/specificity/gates.py` and `docs/pilot_protocol.md`. Homology is not implemented.
+- Left the June PCA baseline in place as `run_phase1.py`.
+- Pinned `transformer-lens` to 3.9.0 so that baseline still imports `HookedTransformer`.
+- Recorded that a draft gate would have rejected a quoted row with zero obedience, and corrected that rule before any pilot forward.
+
 ## [Added]
 - `src/baseline/pca_check.py` implemented for linear baseline validation.
 - 2D PCA reduction, variance ratio logging, and silhouette score computation.

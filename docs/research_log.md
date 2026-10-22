@@ -1,5 +1,7 @@
 # Research Log & Architectural Anomalies
 
+Status on 22 October 2026: the active study is the specificity pilot in `docs/pilot_protocol.md`. Persistent homology is gated and has not been run. The June entries below are the historical baseline, kept as written.
+
 ## [2026-06-19] PyTorch MPS Backend (Apple Silicon) Matrix Corruption
 **Phase:** 0 (Extraction Reality Check)
 **Hardware:** MacBook Air M3 (Unified Memory Architecture)
@@ -28,4 +30,18 @@ For the integrity of the research, computational speed should be sacrificed for 
 - **Silhouette Score:** -0.1099
 - **Interpretation:** The negative silhouette score indicates there to be a cluster overlap and entanglement in lower-dimensional linear space. While the first principal component captures significant variance, linear separation of the factual, inconsistent, and neutral regimes fails.
 - **Next Action:** These findings suggest linear geometry is insufficient. We proceed to Phase 2 to apply Topological Data Analysis (TDA), specifically persistent homology, to search for non-linear structural signatures.
+
+The next-action line above is the plan as written on 19 June 2026. It was not carried out. The 22 October entry replaces it.
+
+## [2026-10-22] Specificity pilot replaces the active question
+
+**Decision.** The project no longer treats “do factual and false prompts have different residual-stream loops?” as the question being tested. Phase 1’s silhouette of −0.1099 came from three `gpt2-small` sentences. That is too small to show that a linear reading has failed, and `src/topology/persistence.py` was empty.
+
+**Active question.** On one email, at the last document token and before the reply, can a linear probe or a centroid distance separate an injection the model obeys from the same attack sentence shown as a quotation?
+
+**Why this, and not a new topological detector.** Fay et al. (ICLR 2026, arXiv:2505.20435) already report persistent homology of residual activations under indirect prompt injection, including a comparison with linear classifiers. Abdelnabi et al. (SaTML 2025, arXiv:2406.00799) already detect task drift with a linear probe. The open piece is the control: the attack sentence is present in both the obeyed row and the quoted row. Homology is allowed later only if that control defeats both simpler scores. The thresholds are in `src/specificity/gates.py`, written before the forwards.
+
+**Gate correction, made before any pilot forward.** A draft of the milestone said every compliance rate had to sit away from 0 and away from 1. That would have treated a quoted row that never obeys as a failure. The protocol now treats a quoted obedience rate near zero as a successful control. The contrast fails when fewer than 8 injections are obedient or fewer than 8 quoted replies refuse.
+
+**What will be recorded after the run.** Obedience counts, both AUROCs at the early and middle layers, the gate decision, and a 10-reply spot check. Those numbers are not in this entry yet because the forwards have not been run.
 
