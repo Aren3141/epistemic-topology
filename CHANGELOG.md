@@ -6,6 +6,7 @@
 - Pre-registered the persistent-homology gate in `src/specificity/gates.py` and `docs/pilot_protocol.md`. Homology is not implemented.
 - Left the June PCA baseline in place as `run_phase1.py`.
 - Pinned `transformer-lens` to 3.9.0 so that baseline still imports `HookedTransformer`.
+- Recorded the one-email CPU smoke test. The pipeline runs. The committed injection was summarised rather than obeyed exactly, so the 90-email run has not started.
 - Recorded that a draft gate would have rejected a quoted row with zero obedience, and corrected that rule before any pilot forward.
 
 ## [Added]
