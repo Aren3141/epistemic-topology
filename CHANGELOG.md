@@ -11,6 +11,7 @@
 - Ran all 90 emails. Every injection was an exact canary reply and no quoted email was. The middle-layer linear probe AUROC is 1.0, so persistent homology stays off.
 - Published the 90-row table in `data/`, a browser page at `docs/explorer/index.html`, and tests that recompute the AUROCs from that table.
 - Allowed `run_example` to take another system message and another cache directory. Stage 2, in `docs/stage2_protocol.md`, asks whether obedience survives when the system message only says to summarise.
+- Finished that summarise-only run. Exact hijack happened on 3 of 30 injections. The canary was mentioned in 13 of 30 injection summaries and in no quotation.
 - Recorded that a draft gate would have rejected a quoted row with zero obedience, and corrected that rule before any pilot forward.
 
 ## [Added]
