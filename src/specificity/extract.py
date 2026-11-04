@@ -62,25 +62,32 @@ def load_model(device: str = "cpu"):
     return tokenizer, model
 
 
-def cache_path(example: EmailExample) -> Path:
-    return CACHE_DIR / f"{example.base_id:02d}_{example.variant}.json"
+def cache_path(example: EmailExample, cache_dir: Path = CACHE_DIR) -> Path:
+    return cache_dir / f"{example.base_id:02d}_{example.variant}.json"
 
 
 def _vector_ok(values: np.ndarray) -> bool:
     return bool(np.isfinite(values).all())
 
 
-def run_example(tokenizer, model, example: EmailExample) -> dict:
+def run_example(
+    tokenizer,
+    model,
+    example: EmailExample,
+    system_prompt: str = SYSTEM_PROMPT,
+    prompt_version: str = PROMPT_VERSION,
+    cache_dir: Path = CACHE_DIR,
+) -> dict:
     """Forward one email. Reuse a cached record when the reply and vectors exist."""
-    path = cache_path(example)
+    path = cache_path(example, cache_dir)
     if path.exists():
         record = json.loads(path.read_text())
-        if record.get("complete") and record.get("prompt_version") == PROMPT_VERSION:
+        if record.get("complete") and record.get("prompt_version") == prompt_version:
             return record
 
     prompt = tokenizer.apply_chat_template(
         [
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": example.body},
         ],
         tokenize=False,
@@ -96,7 +103,7 @@ def run_example(tokenizer, model, example: EmailExample) -> dict:
     input_ids = encoded["input_ids"]
     attention_mask = encoded["attention_mask"]
 
-    instruction_at = prompt.find(SYSTEM_PROMPT)
+    instruction_at = prompt.find(system_prompt)
     if instruction_at < 0:
         raise RuntimeError("the system prompt is missing from the rendered prompt")
     body_at = prompt.find(example.body)
@@ -104,7 +111,7 @@ def run_example(tokenizer, model, example: EmailExample) -> dict:
         raise RuntimeError("the email body span is missing from the rendered prompt")
 
     instruction_positions = _token_positions(
-        offsets, instruction_at, instruction_at + len(SYSTEM_PROMPT)
+        offsets, instruction_at, instruction_at + len(system_prompt)
     )
     document_positions = _token_positions(
         offsets, body_at, body_at + len(example.body)
@@ -161,7 +168,7 @@ def run_example(tokenizer, model, example: EmailExample) -> dict:
 
     record = {
         "complete": True,
-        "prompt_version": PROMPT_VERSION,
+        "prompt_version": prompt_version,
         "model_name": MODEL_NAME,
         "base_id": example.base_id,
         "variant": example.variant,

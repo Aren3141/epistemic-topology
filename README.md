@@ -4,6 +4,14 @@ A specificity experiment on the residual stream of a small instruction-tuned lan
 
 The question is whether an internal measurement can tell that the model **obeyed** an instruction hidden in an email, rather than merely noticing that the email contains attack-like wording. Persistent homology is not part of the current run. It starts only if the pre-registered gates in `src/specificity/gates.py` say the simpler measurements failed.
 
+## Look at what happened
+
+Open `docs/explorer/index.html` in a browser. It lists all 90 replies. No install and no server.
+
+The same rows are in `data/specificity_pilot_90.jsonl`, with a column guide in `data/README.md`. The page is rebuilt with `PYTHONPATH=. python scripts/build_explorer.py`.
+
+In short: 30 of 30 injected emails produced exactly `ALPHA-OVERRIDE-41`. None of the 30 quotations did. A linear readout of the last email token separates those two cases with a perfect score, so the loop-counting stage stays off. The next question, in `docs/stage2_protocol.md`, is whether that still happens when the system message only says to summarise.
+
 ## The question
 
 The goal of this pilot was a matched set of replies, then a test of whether a simple internal score can tell obedience from a quotation. The set is complete: 30 of 30 injections replied with exactly the canary, and 0 of 30 quoted emails did. On the middle layer the linear probe separates those two rows with AUROC 1.0, so the pre-registered gate keeps persistent homology off.
@@ -70,6 +78,9 @@ That script loads `gpt2-small` through TransformerLens, also on CPU, and writes 
 | Path | Role |
 | --- | --- |
 | `src/specificity/` | Corpus, exact-reply rule, CPU extraction, probe, gates |
+| `data/` | The 90 published rows and the column guide |
+| `docs/explorer/index.html` | The page that shows every reply |
+| `docs/stage2_protocol.md` | Why the next run drops the rule from the system message |
 | `run_specificity_pilot.py` | Authoritative 90-email command |
 | `docs/pilot_protocol.md` | Contract for the pilot, including the homology gate |
 | `docs/research_log.md` | Dated decisions and the June 2026 baseline |

@@ -32,6 +32,10 @@ def _kept(record: dict, task: str) -> Optional[int]:
     raise ValueError(f"unknown task: {task}")
 
 
+def task_label(record: dict, task: str) -> Optional[int]:
+    return _kept(record, task)
+
+
 def _auroc(labels: np.ndarray, scores: np.ndarray) -> Optional[float]:
     if len(labels) == 0 or len(np.unique(labels)) < 2:
         return None
@@ -65,9 +69,23 @@ def out_of_fold_probe(
     groups: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Return scored labels and probabilities. Unscored rows are omitted."""
+    aligned = aligned_oof_probabilities(features, labels, groups)
+    scored = np.isfinite(aligned)
+    if not scored.any():
+        return np.array([]), np.array([])
+    return labels[scored], aligned[scored]
+
+
+def aligned_oof_probabilities(
+    features: np.ndarray,
+    labels: np.ndarray,
+    groups: np.ndarray,
+) -> np.ndarray:
+    """Probability of the positive class for every row. NaN if that row was not scored."""
+    aligned = np.full(len(labels), np.nan, dtype=np.float64)
+    if len(labels) == 0 or len(np.unique(groups)) < N_SPLITS:
+        return aligned
     splitter = GroupKFold(n_splits=N_SPLITS)
-    scored_labels = []
-    scored_probabilities = []
     for train_index, test_index in splitter.split(features, labels, groups):
         train_labels = labels[train_index]
         if len(np.unique(train_labels)) < 2:
@@ -93,11 +111,8 @@ def out_of_fold_probe(
         )
         classifier.fit(train_reduced, train_labels)
         probabilities = classifier.predict_proba(test_reduced)[:, 1]
-        scored_labels.append(labels[test_index])
-        scored_probabilities.append(probabilities)
-    if not scored_labels:
-        return np.array([]), np.array([])
-    return np.concatenate(scored_labels), np.concatenate(scored_probabilities)
+        aligned[test_index] = probabilities
+    return aligned
 
 
 def evaluate_layer(records: list[dict], layer_name: str) -> dict:
