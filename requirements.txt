@@ -1,5 +1,7 @@
 torch
-transformer-lens
+# 4.x removed HookedTransformer, which the historical extractor imports.
+transformer-lens==3.9.0
+transformers
 numpy
 scikit-learn
 ripser

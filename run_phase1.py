@@ -1,3 +1,9 @@
+"""Historical Phase 1 PCA baseline on three gpt2-small prompts.
+
+The current study is the specificity pilot in run_specificity_pilot.py.
+This script is unchanged and is not part of that pilot.
+"""
+
 from src.extraction.extractor import run_extraction
 from src.baseline.pca_check import process_tensors, run_pca_analysis
 
