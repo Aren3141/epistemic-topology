@@ -1,6 +1,6 @@
 # Research Log & Architectural Anomalies
 
-Status on 5 November 2026: stages 1 to 5 are recorded, and the detection gate stays closed. Stage 5 computed the study’s first persistence diagrams, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. About 1.5 weeks remain, to around 16 November 2026: stage 6 token clouds (about 1 week) and the write-up (3 to 4 days). The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
+Status on 5 November 2026: stages 1 to 6 are recorded, and the detection gate stays closed. Stages 5 and 6 computed the study’s persistence diagrams, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. About 1 week remains, to around 12 November 2026: stage 7 confirmation on fresh emails (2 to 3 days, ADR 0004) and the write-up (3 to 4 days). The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
 
 ## [2026-06-19] PyTorch MPS Backend (Apple Silicon) Matrix Corruption
 **Phase:** 0 (Extraction Reality Check)
@@ -171,4 +171,18 @@ The two exact replies are base emails 10 and 23. No reply contains `ALPHA-OVERRI
 **Reading.** Clean clouds are evenly spread, with median nearest-neighbour distance about 0.62 and 8 to 13 small loops. With the attack sentence, nearest neighbours are about 0.3 and only 3 to 5 loops remain. Shape tracks the presence of the sentence, not its framing. In the pilot that holds even though 30 of 30 orders were obeyed and 0 of 30 quotations were, and the probe separates them by position. Base email 28 (“translation pass”) is the most isolated quoted state in all three runs. That is a description, not a test.
 
 **Consequence for the goal.** At the population level, persistent homology adds no obedience information beyond position. Stage 6, token clouds inside each email, is next.
+
+## [2026-11-05] Stage 6, token-cloud shape
+
+**Pre-registration.** `docs/stage6_protocol.md` and `src/topology/stage6.py` were pushed in commit `6095554` before any token state was extracted. The extraction and analysis scripts followed in `3fe4ba2`, before any statistic.
+
+**Setup.** 180 prefill forwards, no generation: the injection and quoted variants of 30 emails under three system messages. Each email’s cloud is its own tokens (48 to 66) plus the attack sentence’s tokens (15 or 16). The email-token states were bit-for-bit identical between variants, and the last-token vectors matched the earlier caches exactly. Five statistics per cloud (H0 total, H1 total, longest loop, separation, attachment). Paired sign-flip test on injection minus quoted, 999 flips.
+
+**Result, middle layer.** Separation is smaller for the order in 30 of 30 emails in every run (p = 0.001). H0 total is larger for the order (p = 0.001, 0.003, 0.001). The outcome is “shape differs, geometry already shows it” in all three runs. The longest loop is larger for the order in the two summarise-only runs (p = 0.001 each) and not in the pilot (p = 0.41).
+
+**Reading.** Framing moves the sentence relative to its email, consistently and slightly, whether or not the model then obeys. Topology registers that move, and geometry registers it as well. The loop pattern across runs was not planned and is the one place where topology departs from geometry. The quotation also puts different text directly before the sentence, which this stage cannot separate from stance.
+
+**Decision.** ADR 0004 adds stage 7: 30 fresh emails, a neutral quotation, and one-sided confirmation tests for the stage 6 directions. The write-up becomes stage 8.
+
+**Timeframe.** About 1 week, to around 12 November 2026: stage 7 for 2 to 3 days, the write-up for 3 to 4.
 

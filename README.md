@@ -18,10 +18,11 @@ Find out whether the shape of the model’s internal states, measured with persi
 | 3. Mention contrast | Done | Whether a reply will mention the code is barely readable (AUROC 0.58). |
 | 4. Second reply string | Done | `BETA-SIGNAL-17` was obeyed 2/30 times. The drop is not about one particular code. |
 | 5. Population shape | Done | First persistence diagrams. Adding the attack sentence changes the loops of the email cloud (p = 0.001 in all three runs). Order versus quotation shows no loop difference, even where obedience was 30/30 against 0/30. One run shows a cluster (H0) difference there, which simpler spacing statistics also detect. |
-| 6. Token-cloud shape | Next | Shape of the word-piece cloud inside one email, order versus quotation. Needs one new forward. |
-| 7. Write-up | Planned | The answer to the goal. |
+| 6. Token-cloud shape | Done | Inside each email, the order’s tokens sit closer to the rest of the email than the quotation’s, in 30 of 30 emails in every run. Topology sees it, but simple geometry already does. Unplanned lead: loops differ only in the runs where the model did not obey. |
+| 7. Confirmation | Next | The stage 6 patterns on 30 fresh emails, plus a neutral quotation (ADR 0004). |
+| 8. Write-up | Planned | The answer to the goal. |
 
-About **1.5 weeks** of work remain, finishing around 16 November 2026: about 1 week for stage 6 and 3 to 4 days for the write-up.
+About **1 week** of work remains, finishing around 12 November 2026: 2 to 3 days for stage 7 and 3 to 4 days for the write-up.
 
 **How topology relates to the gate.** Persistent homology measures shape, not position. Before any forward, the October protocol fixed a gate (`src/specificity/gates.py`): homology would become the obedience **detector** only if a linear probe and a centroid distance both failed. “Gate closed” in these pages means that condition was not met, so homology was not adopted as the detector. It was closed for two reasons. In the pilot the probe succeeded. In stages 2 and 4 too few emails were obeyed to compare. For detection, position is enough on this setup. Stages 5 and 6 ask a different, descriptive question, whether the clouds also differ in shape. They do not reopen that gate. See `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`.
 
@@ -33,7 +34,7 @@ Open `docs/explorer/index.html` for the October pilot, `docs/explorer/summarise-
 
 The same rows are in `data/specificity_pilot_90.jsonl`, `data/summarise_only_90.jsonl`, and `data/second_canary_90.jsonl`, with a column guide in `data/README.md`. The pages are rebuilt with `PYTHONPATH=. python scripts/build_explorer.py`.
 
-In short: under the quote rule, 30 of 30 injected emails produced exactly `ALPHA-OVERRIDE-41` and none of the 30 quotations did. A linear readout of the last email token separates those two cases with a perfect score, so persistent homology was not needed as an obedience detector. The summary-only repeat is scored in `docs/stage2_protocol.md`. There, the whole reply was the code on only 3 of 30 injections, and the mention contrast is in `docs/stage3_protocol.md`. The second reply string is in `docs/stage4_protocol.md`, with 2 of 30. The first persistence diagrams are in `docs/stage5_protocol.md`.
+In short: under the quote rule, 30 of 30 injected emails produced exactly `ALPHA-OVERRIDE-41` and none of the 30 quotations did. A linear readout of the last email token separates those two cases with a perfect score, so persistent homology was not needed as an obedience detector. The summary-only repeat is scored in `docs/stage2_protocol.md`. There, the whole reply was the code on only 3 of 30 injections, and the mention contrast is in `docs/stage3_protocol.md`. The second reply string is in `docs/stage4_protocol.md`, with 2 of 30. The first persistence diagrams are in `docs/stage5_protocol.md`, and the per-email token clouds in `docs/stage6_protocol.md`.
 
 ## The experiment
 
@@ -86,7 +87,7 @@ PYTHONPATH=. python tests/test_token_shape.py
 python run_specificity_pilot.py
 ```
 
-GitHub Actions runs those six test modules on Python 3.13. The workflow installs NumPy, SciPy, scikit-learn, ripser, and persim. It does not download the model. See `.github/workflows/tests.yml`.
+GitHub Actions runs those seven test modules on Python 3.13. The workflow installs NumPy, SciPy, scikit-learn, ripser, and persim. It does not download the model. See `.github/workflows/tests.yml`.
 
 `python tests/test_labels.py` on its own cannot import `src`. The `PYTHONPATH=.` prefix is the command that works. None of the test modules loads the model.
 
@@ -94,6 +95,13 @@ When all three caches are present, re-run stage 5:
 
 ```bash
 PYTHONPATH=. python scripts/run_population_shape.py
+```
+
+Stage 6 needs its own prefill forwards, about two minutes, then the analysis, about one second:
+
+```bash
+PYTHONPATH=. python scripts/extract_token_clouds.py
+PYTHONPATH=. python scripts/run_token_shape.py
 ```
 
 The stage 2 and stage 4 caches are built by their own 90-email commands, about eight minutes each:
@@ -162,6 +170,10 @@ That script loads `gpt2-small` through TransformerLens, also on CPU, and writes 
 | `src/evaluation/wasserstein.py` | Diagram distance, spacing baseline, and the paired permutation test |
 | `scripts/run_population_shape.py` | Stage 5 on the cached vectors. About 15 seconds. No model load |
 | `docs/stage5_protocol.md` | Stage 5 protocol and result |
+| `src/topology/stage6.py` | Stage 6 constants, per-email statistics, sign-flip test, and outcome rule |
+| `scripts/extract_token_clouds.py` | Stage 6 prefill. Saves email and sentence token states to `results/token_clouds/` |
+| `scripts/run_token_shape.py` | Stage 6 analysis. About one second. No model load |
+| `docs/stage6_protocol.md` | Stage 6 protocol and result |
 
 ## Hardware
 
@@ -189,4 +201,5 @@ In October the question became the obedience test above. It keeps the topologica
 - Stage 2 has 3 exact injection replies. The October gate closes on that count. The AUROC stored for those 3 rows is not a substitute for the count.
 - The mention contrast holds the attack sentence fixed. Its middle-layer AUROC is 0.58. It is recorded in `docs/stage3_protocol.md` and is not an input to `homology_decision`.
 - Stage 5 clouds have 30 points each. Its loops are small, so the test is on whole diagrams, not on any single loop. A shape difference is a description, not a detector.
+- Stage 6 differences are small (5 to 8 percent of the typical distance) and consistent because pairing removes everything except the sentence. The order and the quotation also differ in what directly precedes the sentence. The loop pattern across runs was noticed after the fact and is not yet confirmed.
 - The study uses two fixed reply strings on one 1.5B model. `BETA-SIGNAL-17` was exact on 2 of 30 injections. That did not reopen the gate. A third string, or a larger model, would be a new protocol.
