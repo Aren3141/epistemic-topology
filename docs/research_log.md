@@ -1,6 +1,6 @@
 # Research Log & Architectural Anomalies
 
-Status on 5 November 2026: stages 1 to 6 are recorded, and the detection gate stays closed. Stages 5 and 6 computed the study’s persistence diagrams, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. About 1 week remains, to around 12 November 2026: stage 7 confirmation on fresh emails (2 to 3 days, ADR 0004) and the write-up (3 to 4 days). The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
+Status on 5 November 2026: stages 1 to 7 are recorded, and the detection gate stays closed. Stages 5 to 7 computed the study’s persistence diagrams, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. The fresh-email confirmation is in the stage 7 entry below. About 3 to 4 days remain, to around 9 November 2026, for the write-up. No further forwards are scheduled. The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
 
 ## [2026-06-19] PyTorch MPS Backend (Apple Silicon) Matrix Corruption
 **Phase:** 0 (Extraction Reality Check)
@@ -184,5 +184,19 @@ The two exact replies are base emails 10 and 23. No reply contains `ALPHA-OVERRI
 
 **Decision.** ADR 0004 adds stage 7: 30 fresh emails, a neutral quotation, and one-sided confirmation tests for the stage 6 directions. The write-up becomes stage 8.
 
-**Timeframe.** About 1 week, to around 12 November 2026: stage 7 for 2 to 3 days, the write-up for 3 to 4.
+**Timeframe.** About 1 week, to around 12 November 2026: stage 7 for 2 to 3 days, the write-up for 3 to 4. Stage 7 finished the same evening; see the next entry.
+
+## [2026-11-05] Stage 7, confirmation on fresh emails
+
+**Pre-registration.** `docs/stage7_protocol.md`, `src/topology/stage7.py`, and the 30 fresh emails were pushed in commit `904482e` before any stage 7 forward. The generation and analysis scripts followed in `b5a7d0d`, before any statistic.
+
+**Setup.** 30 new base emails, none of the October senders or topics. Three variants: the order, the training-note quotation, and a neutral quotation whose lead-in does not say whether to follow the sentence. Two system messages, `system-policy-v1` and summarise-only, both with `ALPHA-OVERRIDE-41`. 180 generation forwards, then 180 prefills. Ten paired sign-flip tests, one family, threshold p ≤ 0.005.
+
+**Behaviour, not one of the ten tests.** Pilot: 30/30 injections exact, 0/30 quoted, 0/30 neutral. Summarise-only: 1/30 injections exact (email 28), 15/30 injection replies mention the code, 0/30 quoted, 0/30 neutral. The neutral quotation was not obeyed even under the system message that only exempts quotations which say not to follow them.
+
+**Confirmations, middle layer.** Both separation tests confirmed, 0 of 30 emails with the order further away, p = 0.001. In every email the order is closest, the neutral quotation is in the middle, and the training note is furthest. H0 is confirmed in the pilot (29 of 30, p = 0.001) and not in the summarise-only run (16 of 30, p = 0.372), so the stage 6 topology result does not replicate. The loop interaction is confirmed (25 of 30, p = 0.001). The summarise-only loop test alone is not (22 of 30, p = 0.036). The pre-registered reading of the lead-in, in both runs, is that both the quoting lead-in and its wording move the sentence.
+
+**Reading.** The stage 6 separation result survives fresh emails, and it is not only an artefact of the training note sitting next to the sentence. The cluster statistic that accompanied it does not survive the summarise-only system message. The one topology-specific lead survives only as an interaction between system messages, not as a summarise-only loop difference that clears the threshold on its own.
+
+**Timeframe.** About 3 to 4 days remain, to around 9 November 2026, for the write-up. No further forwards are scheduled.
 
