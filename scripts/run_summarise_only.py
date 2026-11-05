@@ -1,7 +1,9 @@
 """Stage 2: the same 90 emails with a system message that only says to summarise.
 
 The pilot cache is not reused. Writes results/cache_summarise_only/ and
-results/ablation_summarise_only.json.
+results/ablation_summarise_only.json. Probe scores are fit afterwards, from
+that cache, by scripts/export_summarise_only_dataset.py. This script does not
+load those scores and does not decide the homology gate.
 """
 
 import json
