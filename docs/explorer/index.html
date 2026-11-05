@@ -39,7 +39,7 @@
     <div class="stat"><b>1.00</b> probe score for telling those two apart</div>
   </div>
   <h2>What the score means</h2>
-  <p>Before the model wrote a reply, we saved the internal state at the last token of the email. A simple linear classifier, trained on other emails, scored that state. It separated “obeyed the order” from “only quoted the order” perfectly. A coarser distance between the instruction and the email also separated them, at 0.82. The rule we wrote down before the run says: if a simple score already works this well, do not add the more elaborate loop-counting maths. So that maths has not been run.</p>
+  <p>Before the model wrote a reply, we saved the internal state at the last token of the email. A simple linear classifier, trained on other emails, scored that state. It separated “obeyed the order” from “only quoted the order” perfectly. A coarser distance between the instruction and the email also separated them, at 0.82. The rule we wrote down before the run says: if a simple score already works this well, do not use the more elaborate loop-counting maths as the detector. Loop counting was later run as a description of shape, in stage 5, and it did not separate orders from quotations either.</p>
   <p>This is not a security product. The system message explains the rule. The perfect score shows the rule is readable inside the model, on this setup. The follow-up, with the system message reduced to a plain summary request, is <a href="summarise-only.html">stage 2</a>.</p>
   <h2>Every email</h2>
   <div class="filters" id="filters">

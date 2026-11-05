@@ -15,11 +15,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Install the table-test dependencies
-        run: python -m pip install numpy scikit-learn
+      - name: Install the table-test and topology dependencies
+        run: python -m pip install numpy scipy scikit-learn ripser persim
       - name: Run the tests that do not load the model
+        env:
+          MPLBACKEND: Agg
         run: |
           PYTHONPATH=. python tests/test_labels.py
           PYTHONPATH=. python tests/test_dataset.py
           PYTHONPATH=. python tests/test_summarise_only.py
           PYTHONPATH=. python tests/test_second_canary.py
+          PYTHONPATH=. python tests/test_topology.py
+          PYTHONPATH=. python tests/test_population_shape.py
