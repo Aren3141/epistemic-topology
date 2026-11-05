@@ -1,6 +1,6 @@
 # Research Log & Architectural Anomalies
 
-Status on 5 November 2026: the October pilot, the summarise-only scores, and the second reply string are recorded. Persistent homology stays off. The summarise-only cache was re-exported and matched the published table. No further forwards are scheduled. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
+Status on 5 November 2026: stages 1 to 4 are recorded, and the detection gate stays closed. Stage 5, the first persistence diagrams of this study, is next, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. About 2 weeks remain, to around 19 November 2026: stage 5 (about 1 day), stage 6 token clouds (about 1 week), and the write-up (3 to 4 days). The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
 
 ## [2026-06-19] PyTorch MPS Backend (Apple Silicon) Matrix Corruption
 **Phase:** 0 (Extraction Reality Check)
@@ -149,4 +149,14 @@ The two exact replies are base emails 10 and 23. No reply contains `ALPHA-OVERRI
 **Reading.** The drop in exact hijack is not a quirk of the particular code `ALPHA-OVERRIDE-41`. A second code of the same shape, under the same summary instruction, was exact on 2 of 30 injections. The last email token still shows that the attack sentence is present. It does not show whether the reply will mention the code.
 
 **Close-out of the previous day.** `scripts/export_summarise_only_dataset.py` was re-run against `results/cache_summarise_only/` before this forward. The published summarise-only counts matched. No further forwards are scheduled.
+
+## [2026-11-05] Returning to the topological goal
+
+**Problem.** Four stages in, the repository could explain its gate but not its name. No persistence diagram had been computed, and the README described homology only as something that stays off.
+
+**Decision.** The gate answered a detection question: is homology needed to tell an obeyed order from a quotation? Both times it said no. It never asked whether the clouds of states differ in shape. Persistent homology ignores translation and rotation, so it is the instrument for that question, and the linear probe is not. Stage 5 computes diagrams on the 270 cached last-token vectors. Stage 6 computes them on the token clouds inside each email, as the October protocol already described. Both are descriptive. Neither feeds `homology_decision`. Each is compared with a simpler geometric statistic under the same permutation test. Record: `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`.
+
+**Documentation.** `docs/overview.md` now explains the project, the tools, the stage map, and the remaining time to someone new. The exact system messages, training-note prefix, email template, and seed are quoted in `docs/pilot_protocol.md`, which closes four of the newcomer questions in `docs/qa_log.md`.
+
+**Timeframe.** About 2 weeks, to around 19 November 2026.
 

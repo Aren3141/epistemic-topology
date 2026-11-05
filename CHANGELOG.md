@@ -1,6 +1,9 @@
 # Changelog
 
 ## [2026-11-05]
+- Added `docs/overview.md`: what the project is, what persistent homology measures, why stages 1 to 4 measured position first, the stage map, and about 2 weeks remaining.
+- Rewrote the top of the README around the goal and the stage table. Quoted the exact prompts, prefix, email template, and seed in `docs/pilot_protocol.md`.
+- ADR 0003: descriptive topology (stages 5 and 6) runs beside the detection gate and never feeds `homology_decision`. Updated the `docs-keeper` and `external-qa` instructions to match.
 - Ran the second required reply, `BETA-SIGNAL-17`, under the summarise-only system message. Exact obedience is 2/30 injections and 0/30 quotations. Mention inside injections is 12/30. Middle-layer clean-versus-injection AUROC is 1.0. The gate stays closed on the class count. ADR: `docs/adr/0002-second-reply-string-does-not-amend-the-gate.md`.
 - Re-exported the summarise-only cache. The published counts matched.
 - Added a GitHub Actions workflow that runs the four table-test modules without downloading the model.
