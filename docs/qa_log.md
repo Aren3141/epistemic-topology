@@ -139,3 +139,59 @@ Total 59 passed, 0 failed. Every module reported "Ran N tests" with N above 0. T
 **Performance.** Stage 5 reads 270 cached vectors and runs 999 paired permutations for 6 comparisons, 2 layers, and 2 scalings in about 15 seconds. No test imports the extractor, `torch`, or `transformers`, and none calls `from_pretrained`. The expensive step is still a fresh 90-email 1.5B float32 CPU forward, about seven to eight minutes, and stage 6 needs one.
 
 **Not run.** No model forward. No linter or typechecker. The explorer pages were read as files, not opened in a browser. `scripts/build_explorer.py` was not re-run. Pull requests 2, 8, and 9 were not merged or modified. The `elapsed_seconds` change was not reverted or committed.
+
+## 2026-11-05 — stage 6 pass (pull request 10, `feature/token-shape` at `7056e58`)
+
+Midway through this pass the working tree moved to `feature/confirmation` (`7056e58` plus `904482e`, stage 7 pre-registration). The pull request 10 files were read before that move, or compared with `git diff feature/token-shape feature/confirmation`, which touches only `README.md` and the workflow. The tests below were re-run on a `git archive feature/token-shape` export in a temporary directory.
+
+**Questions a newcomer still has after `README.md` and `docs/overview.md`.**
+
+1. "Typical distance" (`docs/overview.md:46`, `README.md:205`) is not defined. In stage 5 it meant the median pairwise distance. Here it does not (see doc drift).
+2. "Prefill forwards" (`docs/overview.md:66`, `README.md:100`) is not defined.
+3. "Longest loop" (`docs/overview.md:48`) is not defined. The protocol calls it "H1 longest loop", the most persistent H1 bar.
+4. The glossary's "Last email token" (`docs/overview.md:80`) is the last token of the whole user message, attack sentence included. Stage 6's "email tokens" exclude the sentence. The two uses of "email" collide.
+5. Neither page says what stage 7 counts as confirmed, or what the write-up says if it fails. ADR 0004 (Consequences) and `docs/stage7_protocol.md` do.
+6. The glossary's "Permutation test" says "shuffle the labels". Stage 6 flips the sign of paired differences. That is close enough, but it is not said.
+
+The project, the goal, where it stands (stages 1 to 6 done, 7 next), and the time remaining (about 1 week, to around 12 November 2026) can each be said in one sentence from those two pages.
+
+**Pre-registration order.** Commits are `6095554` (protocol, `src/topology/stage6.py`, tests) → `3fe4ba2` (scripts) → `0d2aa7b` (summary, figures, summary tests) → `7056e58` (status pages, ADR 0004). The local reflog for `origin/feature/token-shape` records pushes at 21:34:23, 21:37:56, and 21:41:09. `git diff 6095554 HEAD -- docs/stage6_protocol.md` only adds `## Result`. `src/topology/stage6.py` and `src/specificity/gates.py` are unchanged since `6095554` and against `main`. File times in `results/token_clouds/` show the extraction ran from 21:35:08 to 21:37:05. That is after the protocol push, but before the scripts commit, using the uncommitted script, last modified at 21:34:55 and unchanged since. `data/token_shape_summary.json` was last written at 21:37:58, after the scripts push. File times cannot rule out an earlier, overwritten analysis run.
+
+**Docs versus data.** All 15 middle-layer, normalised rows of the Result table (medians, order-larger counts, p-values) match `data/token_shape_summary.json`. All three outcomes are "shape differs, geometry already shows it" and follow from `token_outcome`. The checks are 0.0 in every run. The extraction took 118.3 s, the analysis 1.3 s, and the clouds have 48 to 66 email tokens plus 15 or 16 sentence tokens. Separation is smaller for the order in 30 of 30 emails in every run, with no ties. Recomputing each sign-flip test from `per_email` reproduces 59 of 60 p-values. The exception is early, summarise-only, H1 total: 0.037 against the published 0.036. That comes from the six-decimal rounding of `per_email`, and that layer is not interpreted.
+
+**Doc drift and claims.**
+
+- "5 to 8 percent of the typical distance" (`docs/stage6_protocol.md:128`, `docs/overview.md:46`, `README.md:205`) is wrong as worded. The per-email gap is 4.8, 6.6, and 7.9 percent of the quotation's separation. As a share of the cloud's median pairwise distance, which is 1 after normalisation, it is 2.8, 3.9, and 4.6 percent.
+- `docs/stage6_protocol.md:129` explains the larger H0 for the order as "a sentence that sits slightly apart from the rest". Reading 1 says the order sits closer. Without normalisation, summarise-only H0 does not differ (p = 0.50, printed only).
+- "The only place in stages 5 and 6 where topology behaves differently from geometry across conditions" (`docs/stage6_protocol.md:130`, `docs/adr/0004-confirm-stage-6-on-fresh-emails.md:11`, `docs/overview.md:48`, also `docs/stage7_protocol.md:11` on the next branch) is not supported by the table. Attachment, a geometric statistic, is larger for the order in the pilot (22 of 30, p = 0.001), and smaller in summarise-only (10 of 30, p = 0.038) and second canary (13 of 30, p = 0.099).
+- H1 total differs in opposite directions in the two runs that share the summarise-only system message: summarise-only 6 of 30 order larger (p = 0.003), second canary 23 of 30 (p = 0.005). No page mentions it.
+- "Topology adds nothing beyond geometry" (`docs/stage6_protocol.md:129`, ADR 0004 line 10) is stronger than the rule. The label means the run's geometry p was below 0.05. It does not test whether the topological difference is explained by the geometric one.
+- "Where the model did not obey" (`README.md:21`, `docs/overview.md:60`, `CHANGELOG.md:4`) is also "where the system message lacks the quote rule". Those runs had 3 and 2 obeyed injections, not 0.
+- The adjacency caveat is stated (`docs/stage6_protocol.md:131`, `README.md:205`, ADR 0004). It does not mention that the training note also puts the quoted sentence more tokens away from the email.
+- `docs/stage6_protocol.md:40` says "last-email-token". The code compares the last token of the whole body (`scripts/extract_token_clouds.py:81`), which is what the cache stores as `last_document`. The code is right; the wording is loose.
+- `docs/stage6_protocol.md:100` gives the threshold as "p ≤ 0.0056". The rule is p ≤ 0.05/9 = 0.00556.
+- Stage tables in `README.md` and `docs/overview.md` agree (6 done, 7 next, 8 planned). The timeframe of about 1 week, to around 12 November 2026, is the same in README, overview, research log, CHANGELOG, and ADR 0004. "1.5 weeks" and "Stage 6 … is next" remain only in dated earlier entries (`CHANGELOG.md:8`, `docs/research_log.md:173`).
+
+**Code versus protocol.** These match `docs/stage6_protocol.md`: token spans found by character offset, with boundary and id checks; pooled scaler and PCA fit on the injection's email tokens plus all 60 sentence spans; 16 components (`PCA_COMPONENTS`, read from `gates.py`); per-cloud median-distance normalisation; ripser H0 and H1 with the infinite bar dropped; separation and attachment as defined; a two-sided sign flip with p = (1 + count)/1000; thresholds 0.05/9 and 0.05/6; and the four-row outcome rule. Clouds are at most 82 points by 16 dimensions. One gap: the boundary checks run only when an `.npz` is freshly written, not on reuse. This run wrote all of them fresh.
+
+**Git.** The working tree was clean at the start. No `.env`, key, token, `results/` path, or `.npz` is tracked. The two new figures are 104 KB and 233 KB. `.gitignore` ignores `results/`, and `requirements.txt` pins `transformer-lens==3.9.0`. Neither `scripts/run_token_shape.py` nor `scripts/extract_token_clouds.py` imports or calls `homology_decision`, and the summary sets `passes_into_homology_decision: false`. `gh auth status` failed (keyring login invalid), so open pull requests were not listed. Pull request 2 was not touched.
+
+**Tests.** Run on the `feature/token-shape` export, with `PYTHONPATH=. <repo>/.venv/bin/python tests/<file>`. Wall time is from a shell timer.
+
+| Module | Result | Unittest time | Wall clock |
+| --- | --- | --- | --- |
+| `tests/test_dataset.py` | 10 passed | 0.017s | 2.6s |
+| `tests/test_labels.py` | 9 passed | 0.000s | 2.0s |
+| `tests/test_population_shape.py` | 7 passed | 0.004s | 2.8s |
+| `tests/test_second_canary.py` | 9 passed | 0.011s | 1.9s |
+| `tests/test_summarise_only.py` | 8 passed | 0.014s | 1.9s |
+| `tests/test_token_shape.py` | 20 passed | 0.025s | 2.0s |
+| `tests/test_topology.py` | 16 passed | 18.110s | 20.1s |
+
+Total 79 passed, 0 failed. Every module reported "Ran N tests" with N above 0. The seven files match the seven commands in `.github/workflows/tests.yml` on that branch. On `feature/confirmation`, `tests/test_confirmation.py` also ran 9 tests and passed. Without `PYTHONPATH=.`, `tests/test_labels.py` fails with `ModuleNotFoundError: No module named 'src'`. There is no configured linter or typechecker, so none was run. `tests/test_topology.py` took 14 to 18 s, against 0.49 s in the stage 5 pass. Pull request 10 does not change it or the persistence code, and the sandbox did not allow `ps`. CPU contention from parallel stage 7 work is likely but unconfirmed.
+
+**Hygiene.** No `subprocess`, `os.system`, `shell=True`, `pickle`, `allow_pickle`, or Python `eval`/`exec` in the Python sources. The explorer is unchanged by this pull request. It still builds card chrome with `innerHTML` and sets the reply with `textContent` (`scripts/build_explorer.py:79`, `:86`). There is no server and no authentication surface.
+
+**Performance.** No test imports `torch`, `transformers`, or the extractor. `tests/test_token_shape.py` only parses the two scripts with `ast`. The stage 6 analysis took 1.3 s (`elapsed_seconds`), and the extraction 118.3 s (`results/token_clouds/checks.json`).
+
+**Not run.** No model forward. `scripts/extract_token_clouds.py` and `scripts/run_token_shape.py` were not run, because the second would rewrite the summary and figures; numbers were recomputed read-only. No linter or typechecker. Figures were not inspected visually. No git command that changes state.
