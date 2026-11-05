@@ -26,3 +26,4 @@ jobs:
           PYTHONPATH=. python tests/test_summarise_only.py
           PYTHONPATH=. python tests/test_second_canary.py
           PYTHONPATH=. python tests/test_topology.py
+          PYTHONPATH=. python tests/test_population_shape.py

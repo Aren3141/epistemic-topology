@@ -1,0 +1,2047 @@
+{
+  "stage": 5,
+  "protocol": "docs/stage5_protocol.md",
+  "passes_into_homology_decision": false,
+  "constants": {
+    "n_components": 16,
+    "n_permutations": 999,
+    "seed": 20261022,
+    "alpha": 0.05,
+    "topology_threshold": 0.004166666666666667,
+    "baseline_threshold": 0.008333333333333333,
+    "primary_layer": "middle",
+    "homology_dimensions": [
+      0,
+      1
+    ],
+    "diagram_distance": "1-Wasserstein, L-infinity ground metric",
+    "baseline": "1-Wasserstein between pairwise-distance distributions"
+  },
+  "runs": {
+    "pilot": {
+      "prompt_version": "system-policy-v1",
+      "cache": "results/cache",
+      "layers": {
+        "middle": {
+          "clouds": {
+            "clean": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 19.54996559023857,
+              "h1_count": 13,
+              "h1_total_persistence": 0.4669610261917114,
+              "h1_max_persistence": 0.09627914428710938,
+              "median_nearest_neighbour": 0.6357915039644872,
+              "most_isolated_base_id": 20,
+              "most_isolated_nearest_neighbour": 0.9438423463609522
+            },
+            "injection": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 10.077451720833778,
+              "h1_count": 4,
+              "h1_total_persistence": 0.17649143934249878,
+              "h1_max_persistence": 0.13688057661056519,
+              "median_nearest_neighbour": 0.30107153985869683,
+              "most_isolated_base_id": 28,
+              "most_isolated_nearest_neighbour": 0.6889276694488109
+            },
+            "quoted": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 13.399803295731544,
+              "h1_count": 5,
+              "h1_total_persistence": 0.058328777551651,
+              "h1_max_persistence": 0.023564934730529785,
+              "median_nearest_neighbour": 0.3149024186039286,
+              "most_isolated_base_id": 28,
+              "most_isolated_nearest_neighbour": 2.9632423247797335
+            }
+          },
+          "comparisons": {
+            "clean_vs_injection": {
+              "normalised": {
+                "h0": {
+                  "observed": 9.037383012473583,
+                  "null_mean": 3.261529909265978,
+                  "p_value": 0.027
+                },
+                "h1": {
+                  "observed": 0.27842122316360474,
+                  "null_mean": 0.018260153131680685,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 0.2803437037039207,
+                  "null_mean": 0.10882840293192617,
+                  "p_value": 0.035
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 825.045405626297,
+                  "null_mean": 165.86812418048925,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 19.221038341522217,
+                  "null_mean": 0.9200418608801978,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 59.13413483781882,
+                  "null_mean": 9.686569840964811,
+                  "p_value": 0.001
+                }
+              }
+            },
+            "injection_vs_quoted": {
+              "normalised": {
+                "h0": {
+                  "observed": 2.423688143491745,
+                  "null_mean": 2.0736197303678536,
+                  "p_value": 0.258
+                },
+                "h1": {
+                  "observed": 0.11741010844707489,
+                  "null_mean": 0.12397301543104995,
+                  "p_value": 0.563
+                },
+                "spacing": {
+                  "observed": 0.2368638343775936,
+                  "null_mean": 0.08845321656817297,
+                  "p_value": 0.008
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 80.21213269233704,
+                  "null_mean": 24.98053869047203,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 1.4972203969955444,
+                  "null_mean": 1.3939890275607716,
+                  "p_value": 0.442
+                },
+                "spacing": {
+                  "observed": 9.02231773559673,
+                  "null_mean": 1.9668400599531506,
+                  "p_value": 0.001
+                }
+              }
+            }
+          }
+        },
+        "early": {
+          "clouds": {
+            "clean": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 17.892257302999496,
+              "h1_count": 1,
+              "h1_total_persistence": 0.0928986668586731,
+              "h1_max_persistence": 0.0928986668586731,
+              "median_nearest_neighbour": 0.5526945640269383,
+              "most_isolated_base_id": 6,
+              "most_isolated_nearest_neighbour": 1.0879090980641337
+            },
+            "injection": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 20.432330399751663,
+              "h1_count": 14,
+              "h1_total_persistence": 0.5478800535202026,
+              "h1_max_persistence": 0.07076472043991089,
+              "median_nearest_neighbour": 0.6727874491062715,
+              "most_isolated_base_id": 21,
+              "most_isolated_nearest_neighbour": 1.8947901073636233
+            },
+            "quoted": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 13.32431223988533,
+              "h1_count": 5,
+              "h1_total_persistence": 0.07753580808639526,
+              "h1_max_persistence": 0.0351080596446991,
+              "median_nearest_neighbour": 0.3793712409006431,
+              "most_isolated_base_id": 22,
+              "most_isolated_nearest_neighbour": 0.7830757378624816
+            }
+          },
+          "comparisons": {
+            "clean_vs_injection": {
+              "normalised": {
+                "h0": {
+                  "observed": 4.360939562320709,
+                  "null_mean": 19.875339472232536,
+                  "p_value": 0.362
+                },
+                "h1": {
+                  "observed": 0.27446386218070984,
+                  "null_mean": 0.022752152379924753,
+                  "p_value": 0.002
+                },
+                "spacing": {
+                  "observed": 0.13867430426805655,
+                  "null_mean": 2.2832555831061896,
+                  "p_value": 0.796
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 744.2748269252479,
+                  "null_mean": 172.33305009362383,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 3.900457236915827,
+                  "null_mean": 0.5488727155241284,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 79.03604695223666,
+                  "null_mean": 13.093227235087934,
+                  "p_value": 0.001
+                }
+              }
+            },
+            "injection_vs_quoted": {
+              "normalised": {
+                "h0": {
+                  "observed": 6.548545032739639,
+                  "null_mean": 2.3970738517883063,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 0.2976660132408142,
+                  "null_mean": 0.15604331391351717,
+                  "p_value": 0.003
+                },
+                "spacing": {
+                  "observed": 0.19519987589226423,
+                  "null_mean": 0.07626611553061616,
+                  "p_value": 0.002
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 0.6738266889005899,
+                  "null_mean": 0.4084941815786265,
+                  "p_value": 0.009
+                },
+                "h1": {
+                  "observed": 0.052378423511981964,
+                  "null_mean": 0.028811769565572968,
+                  "p_value": 0.007
+                },
+                "spacing": {
+                  "observed": 0.04845015507494739,
+                  "null_mean": 0.020923297847468422,
+                  "p_value": 0.015
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "summarise_only": {
+      "prompt_version": "summarise-only-v1",
+      "cache": "results/cache_summarise_only",
+      "layers": {
+        "middle": {
+          "clouds": {
+            "clean": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 19.30208131670952,
+              "h1_count": 8,
+              "h1_total_persistence": 0.26070529222488403,
+              "h1_max_persistence": 0.08895909786224365,
+              "median_nearest_neighbour": 0.6239432684479841,
+              "most_isolated_base_id": 20,
+              "most_isolated_nearest_neighbour": 0.909983885822645
+            },
+            "injection": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 11.305785864591599,
+              "h1_count": 4,
+              "h1_total_persistence": 0.2737967073917389,
+              "h1_max_persistence": 0.2378154695034027,
+              "median_nearest_neighbour": 0.3367533903725398,
+              "most_isolated_base_id": 10,
+              "most_isolated_nearest_neighbour": 0.5565312546243918
+            },
+            "quoted": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 9.253029599785805,
+              "h1_count": 4,
+              "h1_total_persistence": 0.14413806796073914,
+              "h1_max_persistence": 0.09627830982208252,
+              "median_nearest_neighbour": 0.2659383387942536,
+              "most_isolated_base_id": 28,
+              "most_isolated_nearest_neighbour": 1.3729410654189649
+            }
+          },
+          "comparisons": {
+            "clean_vs_injection": {
+              "normalised": {
+                "h0": {
+                  "observed": 7.829133957624435,
+                  "null_mean": 3.3439120009105214,
+                  "p_value": 0.047
+                },
+                "h1": {
+                  "observed": 0.2547908127307892,
+                  "null_mean": 0.03043734105872559,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 0.19722058021943428,
+                  "null_mean": 0.1209022287837861,
+                  "p_value": 0.117
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 797.1088157892227,
+                  "null_mean": 160.54007261078638,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 11.582948446273804,
+                  "null_mean": 1.4865981248525288,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 59.801388957178105,
+                  "null_mean": 9.847440386950481,
+                  "p_value": 0.001
+                }
+              }
+            },
+            "injection_vs_quoted": {
+              "normalised": {
+                "h0": {
+                  "observed": 3.602280914783478,
+                  "null_mean": 1.8296957679458328,
+                  "p_value": 0.003
+                },
+                "h1": {
+                  "observed": 0.208967387676239,
+                  "null_mean": 0.1426315721016269,
+                  "p_value": 0.093
+                },
+                "spacing": {
+                  "observed": 0.24468158200554158,
+                  "null_mean": 0.08611677196240394,
+                  "p_value": 0.001
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 57.296005725860596,
+                  "null_mean": 24.18125432866949,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 2.7113547325134277,
+                  "null_mean": 1.8606021518821831,
+                  "p_value": 0.107
+                },
+                "spacing": {
+                  "observed": 2.5662322120918697,
+                  "null_mean": 1.875237982599805,
+                  "p_value": 0.192
+                }
+              }
+            }
+          }
+        },
+        "early": {
+          "clouds": {
+            "clean": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 17.859761878848076,
+              "h1_count": 1,
+              "h1_total_persistence": 0.0979384183883667,
+              "h1_max_persistence": 0.0979384183883667,
+              "median_nearest_neighbour": 0.5553032796049191,
+              "most_isolated_base_id": 6,
+              "most_isolated_nearest_neighbour": 1.084017149342359
+            },
+            "injection": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 20.885688185691833,
+              "h1_count": 13,
+              "h1_total_persistence": 0.34971219301223755,
+              "h1_max_persistence": 0.05927157402038574,
+              "median_nearest_neighbour": 0.6354653912936561,
+              "most_isolated_base_id": 21,
+              "most_isolated_nearest_neighbour": 2.391074043232309
+            },
+            "quoted": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 13.546603709459305,
+              "h1_count": 3,
+              "h1_total_persistence": 0.06612834334373474,
+              "h1_max_persistence": 0.026964396238327026,
+              "median_nearest_neighbour": 0.39591034351408083,
+              "most_isolated_base_id": 22,
+              "most_isolated_nearest_neighbour": 0.7588961552232879
+            }
+          },
+          "comparisons": {
+            "clean_vs_injection": {
+              "normalised": {
+                "h0": {
+                  "observed": 5.3631201311945915,
+                  "null_mean": 17.689946241364442,
+                  "p_value": 0.215
+                },
+                "h1": {
+                  "observed": 0.22382530570030212,
+                  "null_mean": 0.02284749647990723,
+                  "p_value": 0.002
+                },
+                "spacing": {
+                  "observed": 0.1608640336255771,
+                  "null_mean": 1.9957298120426137,
+                  "p_value": 0.74
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 744.5518645569682,
+                  "null_mean": 172.29121063206648,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 4.104702576994896,
+                  "null_mean": 0.6025505459702408,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 78.9946063851655,
+                  "null_mean": 13.086462857272531,
+                  "p_value": 0.001
+                }
+              }
+            },
+            "injection_vs_quoted": {
+              "normalised": {
+                "h0": {
+                  "observed": 6.570118650794029,
+                  "null_mean": 2.5347566434869298,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 0.20792026817798615,
+                  "null_mean": 0.16285596201727698,
+                  "p_value": 0.161
+                },
+                "spacing": {
+                  "observed": 0.22783434278484493,
+                  "null_mean": 0.09770959142658847,
+                  "p_value": 0.001
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 0.8492044359445572,
+                  "null_mean": 0.4851355678788773,
+                  "p_value": 0.004
+                },
+                "h1": {
+                  "observed": 0.03945101425051689,
+                  "null_mean": 0.03330774651886942,
+                  "p_value": 0.249
+                },
+                "spacing": {
+                  "observed": 0.050751534125262815,
+                  "null_mean": 0.025967207748348348,
+                  "p_value": 0.021
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "second_canary": {
+      "prompt_version": "summarise-only-beta-v1",
+      "cache": "results/cache_second_canary",
+      "layers": {
+        "middle": {
+          "clouds": {
+            "clean": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 18.800673246383667,
+              "h1_count": 10,
+              "h1_total_persistence": 0.24859118461608887,
+              "h1_max_persistence": 0.06843334436416626,
+              "median_nearest_neighbour": 0.6137361398376651,
+              "most_isolated_base_id": 19,
+              "most_isolated_nearest_neighbour": 0.8859495730390706
+            },
+            "injection": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 11.386493593454361,
+              "h1_count": 4,
+              "h1_total_persistence": 0.19585448503494263,
+              "h1_max_persistence": 0.11989688873291016,
+              "median_nearest_neighbour": 0.3267592913894377,
+              "most_isolated_base_id": 21,
+              "most_isolated_nearest_neighbour": 0.7038928545547605
+            },
+            "quoted": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 9.477950811386108,
+              "h1_count": 3,
+              "h1_total_persistence": 0.10263536870479584,
+              "h1_max_persistence": 0.04475541412830353,
+              "median_nearest_neighbour": 0.2313653146012581,
+              "most_isolated_base_id": 28,
+              "most_isolated_nearest_neighbour": 1.4234215966915786
+            }
+          },
+          "comparisons": {
+            "clean_vs_injection": {
+              "normalised": {
+                "h0": {
+                  "observed": 7.03585010766983,
+                  "null_mean": 3.145746304811136,
+                  "p_value": 0.04
+                },
+                "h1": {
+                  "observed": 0.22015538811683655,
+                  "null_mean": 0.042815558011974536,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 0.27119023870057574,
+                  "null_mean": 0.089133163704711,
+                  "p_value": 0.01
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 784.9454573392868,
+                  "null_mean": 163.33168148409734,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 10.89625358581543,
+                  "null_mean": 2.091518460570632,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 51.7420792119152,
+                  "null_mean": 8.610350186048448,
+                  "p_value": 0.001
+                }
+              }
+            },
+            "injection_vs_quoted": {
+              "normalised": {
+                "h0": {
+                  "observed": 3.3347141295671463,
+                  "null_mean": 2.019319360592851,
+                  "p_value": 0.049
+                },
+                "h1": {
+                  "observed": 0.14924492686986923,
+                  "null_mean": 0.12834820152820647,
+                  "p_value": 0.323
+                },
+                "spacing": {
+                  "observed": 0.17084792797602488,
+                  "null_mean": 0.07055280359198875,
+                  "p_value": 0.006
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 91.70289433002472,
+                  "null_mean": 35.65057478843628,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 2.4595606327056885,
+                  "null_mean": 2.226209543130777,
+                  "p_value": 0.356
+                },
+                "spacing": {
+                  "observed": 5.24345902122163,
+                  "null_mean": 2.5842147989351276,
+                  "p_value": 0.05
+                }
+              }
+            }
+          }
+        },
+        "early": {
+          "clouds": {
+            "clean": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 17.859813705086708,
+              "h1_count": 1,
+              "h1_total_persistence": 0.09800446033477783,
+              "h1_max_persistence": 0.09800446033477783,
+              "median_nearest_neighbour": 0.5553874202259708,
+              "most_isolated_base_id": 6,
+              "most_isolated_nearest_neighbour": 1.0841076077318168
+            },
+            "injection": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 20.31014746427536,
+              "h1_count": 10,
+              "h1_total_persistence": 0.36856353282928467,
+              "h1_max_persistence": 0.09259694814682007,
+              "median_nearest_neighbour": 0.613752455720923,
+              "most_isolated_base_id": 21,
+              "most_isolated_nearest_neighbour": 2.3494345631826334
+            },
+            "quoted": {
+              "n_points": 30,
+              "n_dimensions": 16,
+              "h0_total_persistence": 14.020053774118423,
+              "h1_count": 5,
+              "h1_total_persistence": 0.04094216227531433,
+              "h1_max_persistence": 0.02057170867919922,
+              "median_nearest_neighbour": 0.4080151879306859,
+              "most_isolated_base_id": 21,
+              "most_isolated_nearest_neighbour": 0.6528165956644021
+            }
+          },
+          "comparisons": {
+            "clean_vs_injection": {
+              "normalised": {
+                "h0": {
+                  "observed": 5.044334717094898,
+                  "null_mean": 16.50385384012696,
+                  "p_value": 0.251
+                },
+                "h1": {
+                  "observed": 0.1803828477859497,
+                  "null_mean": 0.02154220637489666,
+                  "p_value": 0.002
+                },
+                "spacing": {
+                  "observed": 0.16582713650402625,
+                  "null_mean": 1.8417795902223437,
+                  "p_value": 0.729
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 744.671441398561,
+                  "null_mean": 172.32746671557845,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 4.111557669937611,
+                  "null_mean": 0.6004455167356435,
+                  "p_value": 0.001
+                },
+                "spacing": {
+                  "observed": 78.985876790108,
+                  "null_mean": 13.085419997659184,
+                  "p_value": 0.001
+                }
+              }
+            },
+            "injection_vs_quoted": {
+              "normalised": {
+                "h0": {
+                  "observed": 5.601333245635033,
+                  "null_mean": 2.904267846881687,
+                  "p_value": 0.004
+                },
+                "h1": {
+                  "observed": 0.2047528475522995,
+                  "null_mean": 0.16765001790599898,
+                  "p_value": 0.217
+                },
+                "spacing": {
+                  "observed": 0.19883623555378588,
+                  "null_mean": 0.13101903265715403,
+                  "p_value": 0.086
+                }
+              },
+              "unscaled": {
+                "h0": {
+                  "observed": 1.2474783938378096,
+                  "null_mean": 0.542078326076821,
+                  "p_value": 0.001
+                },
+                "h1": {
+                  "observed": 0.03995264694094658,
+                  "null_mean": 0.03135384996985649,
+                  "p_value": 0.185
+                },
+                "spacing": {
+                  "observed": 0.04024621713753874,
+                  "null_mean": 0.0319460808247484,
+                  "p_value": 0.214
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "outcomes": {
+    "pilot": {
+      "clean_vs_injection": "shape differs, spacing already shows it",
+      "injection_vs_quoted": "spacing differs, topology does not"
+    },
+    "summarise_only": {
+      "clean_vs_injection": "shape differs, beyond spacing",
+      "injection_vs_quoted": "shape differs, spacing already shows it"
+    },
+    "second_canary": {
+      "clean_vs_injection": "shape differs, spacing already shows it",
+      "injection_vs_quoted": "spacing differs, topology does not"
+    }
+  },
+  "diagrams": {
+    "pilot": {
+      "clean": {
+        "h0": [
+          [
+            0.0,
+            0.461204
+          ],
+          [
+            0.0,
+            0.502753
+          ],
+          [
+            0.0,
+            0.510655
+          ],
+          [
+            0.0,
+            0.555907
+          ],
+          [
+            0.0,
+            0.558804
+          ],
+          [
+            0.0,
+            0.566182
+          ],
+          [
+            0.0,
+            0.568662
+          ],
+          [
+            0.0,
+            0.595525
+          ],
+          [
+            0.0,
+            0.611071
+          ],
+          [
+            0.0,
+            0.618127
+          ],
+          [
+            0.0,
+            0.618908
+          ],
+          [
+            0.0,
+            0.652675
+          ],
+          [
+            0.0,
+            0.657702
+          ],
+          [
+            0.0,
+            0.660524
+          ],
+          [
+            0.0,
+            0.664772
+          ],
+          [
+            0.0,
+            0.667862
+          ],
+          [
+            0.0,
+            0.675738
+          ],
+          [
+            0.0,
+            0.685335
+          ],
+          [
+            0.0,
+            0.690481
+          ],
+          [
+            0.0,
+            0.695518
+          ],
+          [
+            0.0,
+            0.712151
+          ],
+          [
+            0.0,
+            0.764872
+          ],
+          [
+            0.0,
+            0.768898
+          ],
+          [
+            0.0,
+            0.775106
+          ],
+          [
+            0.0,
+            0.82639
+          ],
+          [
+            0.0,
+            0.826483
+          ],
+          [
+            0.0,
+            0.844691
+          ],
+          [
+            0.0,
+            0.869126
+          ],
+          [
+            0.0,
+            0.943842
+          ]
+        ],
+        "h1": [
+          [
+            0.885367,
+            0.958908
+          ],
+          [
+            0.841292,
+            0.893581
+          ],
+          [
+            0.829831,
+            0.831469
+          ],
+          [
+            0.828264,
+            0.862773
+          ],
+          [
+            0.802951,
+            0.81779
+          ],
+          [
+            0.776732,
+            0.801275
+          ],
+          [
+            0.765169,
+            0.773627
+          ],
+          [
+            0.699018,
+            0.769228
+          ],
+          [
+            0.669978,
+            0.70825
+          ],
+          [
+            0.622994,
+            0.649902
+          ],
+          [
+            0.613336,
+            0.633298
+          ],
+          [
+            0.603302,
+            0.699582
+          ],
+          [
+            0.584939,
+            0.590452
+          ]
+        ]
+      },
+      "injection": {
+        "h0": [
+          [
+            0.0,
+            0.172767
+          ],
+          [
+            0.0,
+            0.238453
+          ],
+          [
+            0.0,
+            0.2427
+          ],
+          [
+            0.0,
+            0.243462
+          ],
+          [
+            0.0,
+            0.249807
+          ],
+          [
+            0.0,
+            0.257937
+          ],
+          [
+            0.0,
+            0.264879
+          ],
+          [
+            0.0,
+            0.268834
+          ],
+          [
+            0.0,
+            0.278627
+          ],
+          [
+            0.0,
+            0.298731
+          ],
+          [
+            0.0,
+            0.303412
+          ],
+          [
+            0.0,
+            0.310734
+          ],
+          [
+            0.0,
+            0.314037
+          ],
+          [
+            0.0,
+            0.321484
+          ],
+          [
+            0.0,
+            0.326119
+          ],
+          [
+            0.0,
+            0.329114
+          ],
+          [
+            0.0,
+            0.338849
+          ],
+          [
+            0.0,
+            0.343118
+          ],
+          [
+            0.0,
+            0.365323
+          ],
+          [
+            0.0,
+            0.367365
+          ],
+          [
+            0.0,
+            0.390833
+          ],
+          [
+            0.0,
+            0.396196
+          ],
+          [
+            0.0,
+            0.402969
+          ],
+          [
+            0.0,
+            0.412707
+          ],
+          [
+            0.0,
+            0.44879
+          ],
+          [
+            0.0,
+            0.45251
+          ],
+          [
+            0.0,
+            0.500434
+          ],
+          [
+            0.0,
+            0.548332
+          ],
+          [
+            0.0,
+            0.688928
+          ]
+        ],
+        "h1": [
+          [
+            0.635976,
+            0.772856
+          ],
+          [
+            0.50918,
+            0.526161
+          ],
+          [
+            0.338955,
+            0.360598
+          ],
+          [
+            0.317827,
+            0.318813
+          ]
+        ]
+      },
+      "quoted": {
+        "h0": [
+          [
+            0.0,
+            0.218963
+          ],
+          [
+            0.0,
+            0.231524
+          ],
+          [
+            0.0,
+            0.257286
+          ],
+          [
+            0.0,
+            0.261578
+          ],
+          [
+            0.0,
+            0.264504
+          ],
+          [
+            0.0,
+            0.267735
+          ],
+          [
+            0.0,
+            0.280228
+          ],
+          [
+            0.0,
+            0.305276
+          ],
+          [
+            0.0,
+            0.313405
+          ],
+          [
+            0.0,
+            0.314391
+          ],
+          [
+            0.0,
+            0.315413
+          ],
+          [
+            0.0,
+            0.324289
+          ],
+          [
+            0.0,
+            0.333835
+          ],
+          [
+            0.0,
+            0.339827
+          ],
+          [
+            0.0,
+            0.356627
+          ],
+          [
+            0.0,
+            0.371185
+          ],
+          [
+            0.0,
+            0.39591
+          ],
+          [
+            0.0,
+            0.406737
+          ],
+          [
+            0.0,
+            0.413523
+          ],
+          [
+            0.0,
+            0.423578
+          ],
+          [
+            0.0,
+            0.434909
+          ],
+          [
+            0.0,
+            0.481969
+          ],
+          [
+            0.0,
+            0.483456
+          ],
+          [
+            0.0,
+            0.501001
+          ],
+          [
+            0.0,
+            0.508254
+          ],
+          [
+            0.0,
+            0.525136
+          ],
+          [
+            0.0,
+            0.544115
+          ],
+          [
+            0.0,
+            0.561906
+          ],
+          [
+            0.0,
+            2.963242
+          ]
+        ],
+        "h1": [
+          [
+            0.601996,
+            0.621827
+          ],
+          [
+            0.569914,
+            0.593479
+          ],
+          [
+            0.56051,
+            0.561149
+          ],
+          [
+            0.396415,
+            0.408638
+          ],
+          [
+            0.28932,
+            0.29139
+          ]
+        ]
+      }
+    },
+    "summarise_only": {
+      "clean": {
+        "h0": [
+          [
+            0.0,
+            0.429617
+          ],
+          [
+            0.0,
+            0.4652
+          ],
+          [
+            0.0,
+            0.494191
+          ],
+          [
+            0.0,
+            0.518178
+          ],
+          [
+            0.0,
+            0.518871
+          ],
+          [
+            0.0,
+            0.51894
+          ],
+          [
+            0.0,
+            0.541451
+          ],
+          [
+            0.0,
+            0.554344
+          ],
+          [
+            0.0,
+            0.558377
+          ],
+          [
+            0.0,
+            0.586648
+          ],
+          [
+            0.0,
+            0.593807
+          ],
+          [
+            0.0,
+            0.620798
+          ],
+          [
+            0.0,
+            0.627089
+          ],
+          [
+            0.0,
+            0.653687
+          ],
+          [
+            0.0,
+            0.67825
+          ],
+          [
+            0.0,
+            0.689406
+          ],
+          [
+            0.0,
+            0.692269
+          ],
+          [
+            0.0,
+            0.7019
+          ],
+          [
+            0.0,
+            0.72359
+          ],
+          [
+            0.0,
+            0.735426
+          ],
+          [
+            0.0,
+            0.762598
+          ],
+          [
+            0.0,
+            0.766266
+          ],
+          [
+            0.0,
+            0.770852
+          ],
+          [
+            0.0,
+            0.776973
+          ],
+          [
+            0.0,
+            0.779527
+          ],
+          [
+            0.0,
+            0.823398
+          ],
+          [
+            0.0,
+            0.9034
+          ],
+          [
+            0.0,
+            0.907045
+          ],
+          [
+            0.0,
+            0.909984
+          ]
+        ],
+        "h1": [
+          [
+            0.911041,
+            1.0
+          ],
+          [
+            0.883385,
+            0.901736
+          ],
+          [
+            0.822831,
+            0.838591
+          ],
+          [
+            0.785457,
+            0.799871
+          ],
+          [
+            0.707222,
+            0.755445
+          ],
+          [
+            0.614615,
+            0.656375
+          ],
+          [
+            0.599782,
+            0.631109
+          ],
+          [
+            0.551738,
+            0.553649
+          ]
+        ]
+      },
+      "injection": {
+        "h0": [
+          [
+            0.0,
+            0.205428
+          ],
+          [
+            0.0,
+            0.291783
+          ],
+          [
+            0.0,
+            0.298158
+          ],
+          [
+            0.0,
+            0.301818
+          ],
+          [
+            0.0,
+            0.313487
+          ],
+          [
+            0.0,
+            0.313682
+          ],
+          [
+            0.0,
+            0.314522
+          ],
+          [
+            0.0,
+            0.325255
+          ],
+          [
+            0.0,
+            0.336753
+          ],
+          [
+            0.0,
+            0.341703
+          ],
+          [
+            0.0,
+            0.341919
+          ],
+          [
+            0.0,
+            0.344031
+          ],
+          [
+            0.0,
+            0.378385
+          ],
+          [
+            0.0,
+            0.381014
+          ],
+          [
+            0.0,
+            0.411992
+          ],
+          [
+            0.0,
+            0.412904
+          ],
+          [
+            0.0,
+            0.414835
+          ],
+          [
+            0.0,
+            0.418203
+          ],
+          [
+            0.0,
+            0.428697
+          ],
+          [
+            0.0,
+            0.432481
+          ],
+          [
+            0.0,
+            0.433148
+          ],
+          [
+            0.0,
+            0.442594
+          ],
+          [
+            0.0,
+            0.443309
+          ],
+          [
+            0.0,
+            0.453597
+          ],
+          [
+            0.0,
+            0.466544
+          ],
+          [
+            0.0,
+            0.492099
+          ],
+          [
+            0.0,
+            0.50399
+          ],
+          [
+            0.0,
+            0.506924
+          ],
+          [
+            0.0,
+            0.556531
+          ]
+        ],
+        "h1": [
+          [
+            0.565545,
+            0.58761
+          ],
+          [
+            0.55467,
+            0.564379
+          ],
+          [
+            0.51772,
+            0.521928
+          ],
+          [
+            0.47767,
+            0.715486
+          ]
+        ]
+      },
+      "quoted": {
+        "h0": [
+          [
+            0.0,
+            0.126788
+          ],
+          [
+            0.0,
+            0.156806
+          ],
+          [
+            0.0,
+            0.16188
+          ],
+          [
+            0.0,
+            0.176667
+          ],
+          [
+            0.0,
+            0.188807
+          ],
+          [
+            0.0,
+            0.221417
+          ],
+          [
+            0.0,
+            0.247941
+          ],
+          [
+            0.0,
+            0.260045
+          ],
+          [
+            0.0,
+            0.262362
+          ],
+          [
+            0.0,
+            0.265938
+          ],
+          [
+            0.0,
+            0.26704
+          ],
+          [
+            0.0,
+            0.268206
+          ],
+          [
+            0.0,
+            0.275437
+          ],
+          [
+            0.0,
+            0.276097
+          ],
+          [
+            0.0,
+            0.27845
+          ],
+          [
+            0.0,
+            0.286987
+          ],
+          [
+            0.0,
+            0.292912
+          ],
+          [
+            0.0,
+            0.295718
+          ],
+          [
+            0.0,
+            0.300432
+          ],
+          [
+            0.0,
+            0.304204
+          ],
+          [
+            0.0,
+            0.306637
+          ],
+          [
+            0.0,
+            0.311047
+          ],
+          [
+            0.0,
+            0.344367
+          ],
+          [
+            0.0,
+            0.364284
+          ],
+          [
+            0.0,
+            0.370627
+          ],
+          [
+            0.0,
+            0.400961
+          ],
+          [
+            0.0,
+            0.411788
+          ],
+          [
+            0.0,
+            0.456243
+          ],
+          [
+            0.0,
+            1.372941
+          ]
+        ],
+        "h1": [
+          [
+            0.420247,
+            0.440202
+          ],
+          [
+            0.420239,
+            0.425808
+          ],
+          [
+            0.314497,
+            0.410775
+          ],
+          [
+            0.305357,
+            0.327693
+          ]
+        ]
+      }
+    },
+    "second_canary": {
+      "clean": {
+        "h0": [
+          [
+            0.0,
+            0.407911
+          ],
+          [
+            0.0,
+            0.413454
+          ],
+          [
+            0.0,
+            0.444469
+          ],
+          [
+            0.0,
+            0.496836
+          ],
+          [
+            0.0,
+            0.499457
+          ],
+          [
+            0.0,
+            0.514703
+          ],
+          [
+            0.0,
+            0.51851
+          ],
+          [
+            0.0,
+            0.542981
+          ],
+          [
+            0.0,
+            0.550801
+          ],
+          [
+            0.0,
+            0.562304
+          ],
+          [
+            0.0,
+            0.58268
+          ],
+          [
+            0.0,
+            0.590415
+          ],
+          [
+            0.0,
+            0.637057
+          ],
+          [
+            0.0,
+            0.65602
+          ],
+          [
+            0.0,
+            0.663038
+          ],
+          [
+            0.0,
+            0.665217
+          ],
+          [
+            0.0,
+            0.672265
+          ],
+          [
+            0.0,
+            0.680844
+          ],
+          [
+            0.0,
+            0.698019
+          ],
+          [
+            0.0,
+            0.704449
+          ],
+          [
+            0.0,
+            0.724141
+          ],
+          [
+            0.0,
+            0.769259
+          ],
+          [
+            0.0,
+            0.774595
+          ],
+          [
+            0.0,
+            0.784242
+          ],
+          [
+            0.0,
+            0.787643
+          ],
+          [
+            0.0,
+            0.831654
+          ],
+          [
+            0.0,
+            0.839563
+          ],
+          [
+            0.0,
+            0.88595
+          ],
+          [
+            0.0,
+            0.902196
+          ]
+        ],
+        "h1": [
+          [
+            0.916405,
+            0.984838
+          ],
+          [
+            0.905372,
+            0.913413
+          ],
+          [
+            0.894645,
+            0.917031
+          ],
+          [
+            0.884237,
+            0.890538
+          ],
+          [
+            0.792715,
+            0.804072
+          ],
+          [
+            0.763016,
+            0.779936
+          ],
+          [
+            0.70684,
+            0.754505
+          ],
+          [
+            0.609631,
+            0.619668
+          ],
+          [
+            0.593388,
+            0.62285
+          ],
+          [
+            0.583218,
+            0.611205
+          ]
+        ]
+      },
+      "injection": {
+        "h0": [
+          [
+            0.0,
+            0.157006
+          ],
+          [
+            0.0,
+            0.240139
+          ],
+          [
+            0.0,
+            0.242973
+          ],
+          [
+            0.0,
+            0.260783
+          ],
+          [
+            0.0,
+            0.272555
+          ],
+          [
+            0.0,
+            0.27752
+          ],
+          [
+            0.0,
+            0.289588
+          ],
+          [
+            0.0,
+            0.309241
+          ],
+          [
+            0.0,
+            0.309788
+          ],
+          [
+            0.0,
+            0.314199
+          ],
+          [
+            0.0,
+            0.339319
+          ],
+          [
+            0.0,
+            0.351428
+          ],
+          [
+            0.0,
+            0.354467
+          ],
+          [
+            0.0,
+            0.358827
+          ],
+          [
+            0.0,
+            0.359297
+          ],
+          [
+            0.0,
+            0.36087
+          ],
+          [
+            0.0,
+            0.378538
+          ],
+          [
+            0.0,
+            0.405232
+          ],
+          [
+            0.0,
+            0.408496
+          ],
+          [
+            0.0,
+            0.416688
+          ],
+          [
+            0.0,
+            0.458186
+          ],
+          [
+            0.0,
+            0.474287
+          ],
+          [
+            0.0,
+            0.48522
+          ],
+          [
+            0.0,
+            0.538627
+          ],
+          [
+            0.0,
+            0.552953
+          ],
+          [
+            0.0,
+            0.555742
+          ],
+          [
+            0.0,
+            0.561122
+          ],
+          [
+            0.0,
+            0.649509
+          ],
+          [
+            0.0,
+            0.703893
+          ]
+        ],
+        "h1": [
+          [
+            0.651547,
+            0.697049
+          ],
+          [
+            0.575565,
+            0.695462
+          ],
+          [
+            0.449867,
+            0.470447
+          ],
+          [
+            0.384005,
+            0.393881
+          ]
+        ]
+      },
+      "quoted": {
+        "h0": [
+          [
+            0.0,
+            0.164525
+          ],
+          [
+            0.0,
+            0.197886
+          ],
+          [
+            0.0,
+            0.203754
+          ],
+          [
+            0.0,
+            0.206171
+          ],
+          [
+            0.0,
+            0.207227
+          ],
+          [
+            0.0,
+            0.208642
+          ],
+          [
+            0.0,
+            0.217022
+          ],
+          [
+            0.0,
+            0.218624
+          ],
+          [
+            0.0,
+            0.229589
+          ],
+          [
+            0.0,
+            0.233142
+          ],
+          [
+            0.0,
+            0.238785
+          ],
+          [
+            0.0,
+            0.243038
+          ],
+          [
+            0.0,
+            0.245229
+          ],
+          [
+            0.0,
+            0.279189
+          ],
+          [
+            0.0,
+            0.280822
+          ],
+          [
+            0.0,
+            0.287635
+          ],
+          [
+            0.0,
+            0.293221
+          ],
+          [
+            0.0,
+            0.296942
+          ],
+          [
+            0.0,
+            0.304114
+          ],
+          [
+            0.0,
+            0.307669
+          ],
+          [
+            0.0,
+            0.309745
+          ],
+          [
+            0.0,
+            0.313764
+          ],
+          [
+            0.0,
+            0.342678
+          ],
+          [
+            0.0,
+            0.376613
+          ],
+          [
+            0.0,
+            0.381218
+          ],
+          [
+            0.0,
+            0.455009
+          ],
+          [
+            0.0,
+            0.468012
+          ],
+          [
+            0.0,
+            0.544263
+          ],
+          [
+            0.0,
+            1.423422
+          ]
+        ],
+        "h1": [
+          [
+            0.361233,
+            0.392216
+          ],
+          [
+            0.310902,
+            0.337799
+          ],
+          [
+            0.24645,
+            0.291205
+          ]
+        ]
+      }
+    }
+  },
+  "elapsed_seconds": 14.7
+}
