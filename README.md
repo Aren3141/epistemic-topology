@@ -6,7 +6,7 @@ New here? Read [`docs/overview.md`](docs/overview.md). It explains the idea, the
 
 ## Goal
 
-Find out whether the shape of the model’s internal states, measured with persistent homology, says anything about obedience to a hidden instruction that simpler measurements of position do not already say. The deliverable is a short written answer for `Qwen/Qwen2.5-1.5B-Instruct` on 30 matched emails, with every number traceable to `data/`.
+Find out whether the shape of the model’s internal states, measured with persistent homology, says anything about obedience to a hidden instruction that simpler measurements of position do not already say. The deliverable is [`docs/answer.md`](docs/answer.md): a short written answer for `Qwen/Qwen2.5-1.5B-Instruct` on these emails, with every number traceable to `data/`.
 
 ## Where the project is, 5 November 2026
 
@@ -20,11 +20,11 @@ Find out whether the shape of the model’s internal states, measured with persi
 | 5. Population shape | Done | First persistence diagrams. Adding the attack sentence changes the loops of the email cloud (p = 0.001 in all three runs). Order versus quotation shows no loop difference, even where obedience was 30/30 against 0/30. One run shows a cluster (H0) difference there, which simpler spacing statistics also detect. |
 | 6. Token-cloud shape | Done | Inside each email, the order’s tokens sit closer to the rest of the email than the quotation’s, in 30 of 30 emails in every run. Topology sees that move, and simple geometry already does. Unplanned lead: the longest loop differs across the system messages. |
 | 7. Confirmation | Done | On 30 fresh emails the closer-order result holds in every email, and a neutral quotation sits between the order and the training note. The cluster (H0) result does not hold once the system message only says to summarise. The loop interaction does. |
-| 8. Write-up | Next | The answer to the goal. |
+| 8. Write-up | Done | Position already detects obedience when the system message states the rule. Shape tracks the sentence and its framing. The one fresh-email topological result is a loop interaction between system messages, not a sign that the model refused. See `docs/answer.md`. |
 
-About **3 to 4 days** of work remain, finishing around 9 November 2026. That is the write-up. No further forwards are scheduled.
+The measurement stages and the write-up are finished as of 5 November 2026. No further forwards are scheduled.
 
-**How topology relates to the gate.** Persistent homology measures shape, not position. Before any forward, the October protocol fixed a gate (`src/specificity/gates.py`): homology would become the obedience **detector** only if a linear probe and a centroid distance both failed. “Gate closed” in these pages means that condition was not met, so homology was not adopted as the detector. It was closed for two reasons. In the pilot the probe succeeded. In stages 2 and 4 too few emails were obeyed to compare. For detection, position is enough on this setup. Stages 5 and 6 ask a different, descriptive question, whether the clouds also differ in shape. They do not reopen that gate. See `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`.
+**How topology relates to the gate.** Persistent homology measures shape, not position. Before any forward, the October protocol fixed a gate (`src/specificity/gates.py`): homology would become the obedience **detector** only if a linear probe and a centroid distance both failed. “Gate closed” in these pages means that condition was not met, so homology was not adopted as the detector. It was closed for two reasons. In the pilot the probe succeeded. In stages 2 and 4 too few emails were obeyed to compare. For detection, position is enough on this setup. Stages 5 to 7 ask a different, descriptive question, whether the clouds also differ in shape. They do not reopen that gate. The written answer is `docs/answer.md`. See `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`.
 
 ![Stage 5 persistence diagrams](docs/demos/stage5-population-shape/diagrams.png)
 

@@ -1,6 +1,6 @@
 # Research Log & Architectural Anomalies
 
-Status on 5 November 2026: stages 1 to 7 are recorded, and the detection gate stays closed. Stages 5 to 7 computed the study’s persistence diagrams, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. The fresh-email confirmation is in the stage 7 entry below. About 3 to 4 days remain, to around 9 November 2026, for the write-up. No further forwards are scheduled. The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
+Status on 5 November 2026: stages 1 to 8 are recorded, and the detection gate stays closed. The answer to the goal is `docs/answer.md`. No further forwards are scheduled. The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
 
 ## [2026-06-19] PyTorch MPS Backend (Apple Silicon) Matrix Corruption
 **Phase:** 0 (Extraction Reality Check)
@@ -198,5 +198,13 @@ The two exact replies are base emails 10 and 23. No reply contains `ALPHA-OVERRI
 
 **Reading.** The stage 6 separation result survives fresh emails, and it is not only an artefact of the training note sitting next to the sentence. The cluster statistic that accompanied it does not survive the summarise-only system message. The one topology-specific lead survives only as an interaction between system messages, not as a summarise-only loop difference that clears the threshold on its own.
 
-**Timeframe.** About 3 to 4 days remain, to around 9 November 2026, for the write-up. No further forwards are scheduled.
+**Timeframe.** About 3 to 4 days were then left for the write-up. It is the next entry.
+
+## [2026-11-05] Stage 8, the answer
+
+**What was written.** `docs/answer.md` states the goal’s answer from the published tables. No new forward, no new test, and no edit to `src/specificity/gates.py`.
+
+**The answer, in short.** Position already detects obedience when the system message states the quote rule (probe AUROC 1.0, 30/30 against 0/30), so persistent homology was not adopted as the detector. Across emails, shape tracks whether the attack sentence is present, not whether it was obeyed. Inside one email, the order sits closer than a quotation, including on 30 fresh emails, and a neutral quotation sits between them. The cluster statistic does not replicate under the summarise-only message. The longest-loop interaction between the two system messages does replicate. The summarise-only loop difference on its own does not clear the threshold, so a longer loop is not a confirmed sign of refusal.
+
+**Timeframe.** No further forwards are scheduled.
 

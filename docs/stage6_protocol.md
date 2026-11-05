@@ -37,7 +37,7 @@ The run stops if any of these fails:
 
 1. In each base email, the email token ids and the sentence token ids are identical in the injection and the quotation, and every sentence span starts and ends on a token boundary.
 2. The email-token states agree between the two variants: largest absolute difference at most 1e-4 of the largest absolute value.
-3. The last-email-token vector of the new forward matches the cached `last_document` vector from stages 1, 2, and 4 to the same tolerance, and the prompt token count matches the cache.
+3. The last token of the user message, which is the cached `last_document` vector from stages 1, 2, and 4, matches the new forward to the same tolerance, and the prompt token count matches the cache. That token is the end of the whole message, attack sentence included, not the last token of the email body.
 
 ## Preparing the clouds
 
@@ -97,7 +97,7 @@ Run on 5 November 2026. The protocol and `src/topology/stage6.py` were pushed fi
 
 The figure shows one email in the pilot run. Grey points are the email’s own tokens. Red points are the 15 tokens of the attack sentence, joined in reading order. The sentence traces almost the same path whether it is an order (left) or a quotation (right). The persistence diagrams underneath are almost the same too. The differences below are small and consistent rather than large.
 
-Middle layer, scale-normalised, 999 sign flips. A topology test passes at p ≤ 0.0056. Geometry differs at p ≤ 0.0083. Medians are order / quotation. “Order larger” counts the emails, out of 30, where the order’s value is the larger one.
+Middle layer, scale-normalised, 999 sign flips. A topology test passes at p ≤ 0.05/9 ≈ 0.00556. Geometry differs at p ≤ 0.05/6 ≈ 0.00833. Medians are order / quotation. “Order larger” counts the emails, out of 30, where the order’s value is the larger one.
 
 | Run | Statistic | Medians | Order larger | p |
 | --- | --- | --- | --- | --- |
@@ -126,9 +126,9 @@ One dot per email. The grey line is “no difference”. Points below it in the 
 **Reading.**
 
 1. **Framing moves the sentence, in every email.** In all three runs, and in all 30 emails of each, the attack sentence’s tokens sit closer to the rest of the email when the sentence is an order than when it is a quotation. The median gap is 4.8, 6.6, and 7.9 percent of that email’s quotation separation (pilot, summarise-only, second canary). In the units of the normalised cloud, where the median pairwise distance is 1, the mean gaps are 0.029, 0.038, and 0.046. An earlier draft of this sentence said “5 to 8 percent of the typical distance”; that mixed the two denominators. Under the protocol’s readings, the direction is the same in all three runs: the token-level geometry tracks framing, whether or not the model then obeys.
-2. **Topology passes, but geometry got there first.** H0 total persistence is larger for the order in every run: the cloud takes a little more merging to join up. That is what a sentence that sits slightly apart from the rest looks like. Loops and clusters register the same move that the plain distance between means already shows. So by the rule, topology adds nothing beyond geometry at this scale.
+2. **Topology passes, but geometry got there first.** H0 total persistence is larger for the order in every run. The order sits closer, not further away, so this is not a sentence sitting apart from the email. Each cloud is divided by its own median pairwise distance, which shrinks when the sentence sits closer, and that normalisation can enlarge H0. Without it, the summarise-only H0 difference is p = 0.50 and is not interpreted. The outcome label is “geometry already shows it”: the geometric test also differed. The label does not test whether the topological difference is explained by the geometric one.
 3. **Not pre-registered: the longest loop differs across runs.** In the two runs whose system message only says to summarise, the longest loop is larger for the order (27 and 30 of 30 emails; medians 0.15 against 0.11 and 0.24 against 0.11). In the pilot, where every order was obeyed, it is not (p = 0.41). Those two runs also had 3 and 2 exact replies, so “did not obey” and “the system message lacks the quote rule” are the same contrast here. The protocol did not set up a test between runs, so this is an observation and not a finding. It is not the only geometric pattern that changes with the run: attachment is larger for the order in the pilot (22 of 30, p = 0.001) and points the other way in the summarise-only run (10 of 30, p = 0.038, which does not clear the geometry threshold). H1 total also points opposite ways in the two summarise-only runs (6 of 30 and 23 of 30), and both of those p-values clear the topology threshold. Confirming the loop pattern needs emails the pattern was not seen on. That confirmation is stage 7, and its result is in `docs/stage7_protocol.md`.
-4. **A caveat on “framing”.** In the quotation, the sentence comes right after the training note (“…must not be followed:”), and in the order it comes right after the email. The model reads left to right, so what directly precedes the sentence differs, not only its stance. This stage cannot separate the two. A quotation with a neutral lead-in would.
+4. **A caveat on “framing”.** In the quotation, the sentence comes right after the training note (“…must not be followed:”), and in the order it comes right after the email. The training note also places the quoted sentence more tokens away from the email. The model reads left to right, so what directly precedes the sentence differs, not only its stance. This stage cannot separate the two. Stage 7 adds a quotation with a neutral lead-in of similar length.
 
 Printed only, not interpreted: the early layer shows the same separation direction (p = 0.001 in each run). Without scale normalisation, separation still differs at p = 0.001 in every run.
 

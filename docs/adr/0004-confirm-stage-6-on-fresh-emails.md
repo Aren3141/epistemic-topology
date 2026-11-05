@@ -7,12 +7,12 @@
 
 Stage 6 (`docs/stage6_protocol.md`) found two things in the token clouds of the same 30 base emails used since October.
 
-1. In every email of every run, the attack sentence sits closer to the rest of the email when it is an order than when it is a quotation. This was a pre-registered geometric statistic. Topology agreed with it and added nothing beyond it.
-2. Not pre-registered: the longest loop differs between order and quotation in the two summarise-only runs, where the model almost never obeyed, and not in the pilot, where it always did. This is the only place in stages 5 and 6 where topology behaves differently from geometry across conditions.
+1. In every email of every run, the attack sentence sits closer to the rest of the email when it is an order than when it is a quotation. This was a pre-registered geometric statistic. The outcome label is “geometry already shows it”. That label does not test whether the topological difference is explained by the geometric one.
+2. Not pre-registered: the longest loop differs between order and quotation in the two runs whose system message only says to summarise, where exact obedience was 3 and 2 of 30, and not in the pilot, where it was 30 of 30. Attachment also changes direction between the pilot and those runs. H1 total points opposite ways in the two summarise-only runs, so it gives no direction for this stage.
 
 There is also a confound. The quotation puts the training note (“…must not be followed:”) and a quote mark directly before the sentence, and the order does not. Because the model reads left to right, the sentence’s states may move because of what is next to it, not because of its stance.
 
-Writing up now would leave the only topology-specific lead untested and the main geometric result open to the adjacency explanation.
+Writing up at that point would have left the loop lead untested and the main geometric result open to the adjacency explanation. The training note also places the quoted sentence more tokens away from the email.
 
 ## Decision
 

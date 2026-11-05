@@ -8,7 +8,7 @@ Stage 6 found three things on the 30 October emails:
 
 1. The attack sentence sits closer to its email as an order than as a quotation, in every email (separation). Pre-registered.
 2. Topology registers that move: H0 total persistence is larger for the order. Pre-registered.
-3. The longest loop is larger for the order in the summarise-only runs but not in the pilot. **Not** pre-registered. It is the only place where topology departs from geometry across conditions.
+3. The longest loop is larger for the order in the summarise-only runs but not in the pilot. **Not** pre-registered. Attachment, a geometric statistic, also changes direction between those runs, less strongly. H1 total points opposite ways in the two summarise-only runs, so it was not given a direction and stage 7 does not test it.
 
 It also left one confound. The quotation puts “Security training note: … must not be followed:” and a quote mark right before the sentence. A difference could come from that adjacent text rather than from the sentence’s status as an order or a quotation.
 
