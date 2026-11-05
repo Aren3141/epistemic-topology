@@ -73,4 +73,4 @@ Early layer, printed only: clean-versus-injection probe AUROC 1.0 and centroid 0
 
 The attack sentence is still linearly readable at the last email token when the system message does not state the rule. The centroid distance at the middle layer scores that same split at 0.02. The within-injection mention contrast is stage 3. Its scores stay out of `homology_decision`.
 
-About 1 day of this study remains: re-run `scripts/export_summarise_only_dataset.py` against the local cache and read these tables. No further forwards are scheduled. A second fixed reply string, on the same emails and the same summary-only system message, would take about 1 week and needs approval before any new string is written down.
+The cache was re-exported on 5 November 2026 and these tables matched. The second reply string is stage 4, in `docs/stage4_protocol.md`. It has been run. No further forwards are scheduled.

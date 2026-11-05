@@ -1,6 +1,9 @@
 # Changelog
 
 ## [2026-11-05]
+- Ran the second required reply, `BETA-SIGNAL-17`, under the summarise-only system message. Exact obedience is 2/30 injections and 0/30 quotations. Mention inside injections is 12/30. Middle-layer clean-versus-injection AUROC is 1.0. The gate stays closed on the class count. ADR: `docs/adr/0002-second-reply-string-does-not-amend-the-gate.md`.
+- Re-exported the summarise-only cache. The published counts matched.
+- Added a GitHub Actions workflow that runs the four table-test modules without downloading the model.
 - Scored the summarise-only cache with the October probe. Middle-layer clean-versus-injection AUROC is 1.0. Exact obedience remains 3/30, so the homology gate stays closed on the class count.
 - Recorded the within-injection mention contrast: 13 mentions against 17 omissions, middle-layer probe AUROC 0.58. That contrast does not enter `homology_decision`. ADR: `docs/adr/0001-mention-contrast-does-not-amend-the-gate.md`.
 - Published geometry columns on `data/summarise_only_90.jsonl`, the summary at `data/summarise_only_summary.json`, and `docs/explorer/summarise-only.html`.

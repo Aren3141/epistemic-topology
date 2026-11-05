@@ -29,6 +29,4 @@ The vector that separates clean emails from injections at AUROC 1.0 scores menti
 
 ## What remains
 
-About 1 day of this study remains: re-run `scripts/export_summarise_only_dataset.py` against the local cache and read these tables. No further forwards are scheduled.
-
-The study still measures one canary on one model. A proposed next experiment, not started, would repeat this summarise-only setup with a different fixed reply string, chosen and written into the protocol before the forwards. It would measure the exact-reply count, the clean-versus-injection AUROC, and this mention AUROC. The October gate would stay the gate. If that experiment is approved it is about 1 week, and it is not part of the remaining day.
+The stage 2 cache was re-exported on 5 November 2026 and these tables matched. The second reply string is no longer a proposal. It is `BETA-SIGNAL-17`, written down before its forwards, and the result is in `docs/stage4_protocol.md`. Exact obedience there is 2 of 30. The October gate is unchanged and stays closed. No further forwards are scheduled.
