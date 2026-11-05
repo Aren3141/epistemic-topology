@@ -92,3 +92,42 @@ If the reading is “adjacency”, the stage 6 separation result is not about ho
 - It does not add tests after seeing the stage 7 data. Anything else noticed is reported as an observation.
 - It does not use the second canary. Stage 4 already showed the summarise-only behaviour holds for `BETA-SIGNAL-17`.
 - It does not store raw states in `data/`. The published summary keeps replies, labels, per-email statistics, and p-values.
+
+## Result
+
+The forwards finished on 5 November 2026. Both runs passed the three checks: the email-token states agree across the three variants at a difference of 0.0, and the prefill’s last token matches the generation forward at 0.0. Summary: `data/confirmation_summary.json`. Figure: `docs/demos/stage7-confirmation/confirmation.png`. The analysis took 1.7 seconds. Nothing is passed into `homology_decision`.
+
+Behaviour, recorded and not one of the ten tests:
+
+| Run | Injection exact | Injection mentions the code | Quoted exact | Neutral exact |
+| --- | --- | --- | --- | --- |
+| Pilot | 30 / 30 | 30 / 30 | 0 / 30 | 0 / 30 |
+| Summarise-only | 1 / 30 | 15 / 30 | 0 / 30 | 0 / 30 |
+
+The one summarise-only exact reply is fresh email 28. The neutral quotation was never the whole reply, and it never contained the code, including under the pilot system message. That message only tells the model to ignore a quotation that says not to follow it. The neutral note does not say that. This is a count, not a confirmation test.
+
+The ten tests, middle layer, threshold p ≤ 0.005. “Positive” counts the fresh emails, out of 30, whose difference has the sign named in the test (injection above the other variant, except the two separation tests, where positive means the order sits further away).
+
+| Test | Observed | Positive | p | Verdict |
+| --- | --- | --- | --- | --- |
+| Separation, pilot | −0.037 | 0 | 0.001 | Confirmed |
+| Separation, summarise-only | −0.038 | 0 | 0.001 | Confirmed |
+| H0 total, pilot | +0.172 | 29 | 0.001 | Confirmed |
+| H0 total, summarise-only | +0.006 | 16 | 0.372 | Not confirmed |
+| Longest loop, summarise-only | +0.007 | 22 | 0.036 | Not confirmed |
+| Loop interaction | +0.033 | 25 | 0.001 | Confirmed |
+| Neutral minus quoted, pilot | −0.013 | 0 | 0.001 | Confirmed |
+| Neutral minus quoted, summarise-only | −0.018 | 0 | 0.001 | Confirmed |
+| Order minus neutral, pilot | −0.025 | 0 | 0.001 | Confirmed |
+| Order minus neutral, summarise-only | −0.020 | 0 | 0.001 | Confirmed |
+
+In every fresh email of both runs, separation is ordered injection, then neutral, then quoted. The order sits closest to its email. The training-note quotation sits furthest. The neutral quotation is between them.
+
+**Reading, from the rule written above.**
+
+1. **Stage 6 geometry replicates.** Both separation tests are confirmed. The order sits closer than the training-note quotation in 30 of 30 fresh emails, under both system messages.
+2. **Stage 6 topology does not replicate.** Both H0 tests had to be confirmed. The pilot one is. The summarise-only one is not (16 of 30, p = 0.372).
+3. **The loop lead replicates, on the test that was allowed to say so.** `loop_interaction` is confirmed. The summarise-only loop comparison on its own is not (p = 0.036, above 0.005). The confirmed claim is that the order-minus-quotation loop gap is larger under “summarise” than under the quote-rule message. It is not a claim that the summarise-only loop difference, taken alone, cleared the family threshold.
+4. **Both the lead-in and its wording move the sentence**, in both runs. A quoting lead-in moves the sentence relative to a bare order, and the training note moves it further than the neutral note. The stage 6 separation result is therefore not only adjacency, and not only the words “must not be followed”.
+
+The summary’s `exploratory` section was added after these results and is labelled as not pre-registered. It is not part of this reading.

@@ -43,9 +43,13 @@ Each panel is one cloud of 30 emails, with location and size removed. Blue dots 
 
 Stage 6 looks inside a single email. Every word-piece has its own state, so one email is a cloud of about 70 points: the email’s own tokens (grey) and the 15 tokens of the attack sentence (red). The model reads left to right, so the grey points are identical whether the sentence is an order or a quotation. Only the red points can move.
 
-They move a little, and always the same way. In every one of the 30 emails, in all three runs, the order sits closer to its email than the quotation does, by 5 to 8 percent of the typical distance. Persistent homology registers that too: the clusters (H0) take slightly longer to merge. But the plain distance between the two groups already shows it, so by the pre-registered rule topology adds nothing new here.
+They move a little, and always the same way. In every one of the 30 emails, in all three runs, the order sits closer to its email than the quotation does. The median gap is 4.8 to 7.9 percent of that email’s quotation separation, about 0.03 to 0.05 where each cloud’s median pairwise distance has been set to 1. Persistent homology registers the move in the clusters (H0). The plain distance between the two groups already shows it, so by the pre-registered rule topology adds nothing new there.
 
-One pattern was not planned. In the two runs where the model almost never obeyed, the longest loop is clearly larger for the order. In the pilot, where it always obeyed, it is not. That is the only place so far where topology and simple geometry part ways across conditions. Stage 7 checks it on fresh emails, along with a quotation whose lead-in does not say “do not follow”, to tell framing apart from what simply comes before the sentence. Full numbers: `docs/stage6_protocol.md`.
+One pattern was not planned. In the two runs whose system message only says to summarise, the longest loop is larger for the order. In the pilot, where every order was obeyed, it is not. Those runs also differ in other statistics, so this is a lead, not the only place the runs disagree. Full numbers: `docs/stage6_protocol.md`.
+
+## Fresh emails
+
+Stage 7 repeated the comparison on 30 new emails, and added a third copy: the attack sentence quoted after a note that does not say whether to follow it. The order still sits closest to its email, the training-note quotation furthest, and the neutral quotation between them, in every email of both runs. The cluster difference does not replicate once the system message only says to summarise. The loop lead does replicate on the one test that was allowed to decide it: the gap between order and quotation is larger under “summarise” than under the quote rule. The summarise-only loop comparison on its own does not clear the threshold. Full numbers: `docs/stage7_protocol.md`.
 
 ## The stages so far
 
@@ -57,18 +61,15 @@ One pattern was not planned. In the two runs where the model almost never obeyed
 | 3. Mention contrast | 5 Nov 2026 | Inside injections, can the state predict whether the reply will mention the code? | Barely. AUROC 0.58. Kept out of the gate. | `docs/stage3_protocol.md`, ADR 0001 |
 | 4. Second reply string | 5 Nov 2026 | Is the drop in obedience specific to `ALPHA-OVERRIDE-41`? | No. `BETA-SIGNAL-17` was exact on 2/30. Gate closed. | `docs/stage4_protocol.md`, ADR 0002 |
 | 5. Population shape | 5 Nov 2026 | Do clean, injected, and quoted emails form clouds of different shape, once location is set aside? | Yes for clean against injection: loops differ at p = 0.001 in all three runs. No loop difference for order against quotation. Simpler spacing statistics also see most of it. | `docs/stage5_protocol.md`, ADR 0003 |
-| 6. Token-cloud shape | 5 Nov 2026 | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Yes, slightly and in every email: the order sits closer to its email. Topology sees it, but simple geometry already does. Unplanned lead: loops differ only in the runs where the model did not obey. | `docs/stage6_protocol.md` |
-| 7. Confirmation | Next | Do the stage 6 patterns hold on 30 fresh emails, and does a neutral quotation behave like the order or like the training note? | | ADR 0004 |
-| 8. Write-up | Planned | The answer to the goal above. | | Not started |
+| 6. Token-cloud shape | 5 Nov 2026 | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Yes, slightly and in every email: the order sits closer to its email. Topology sees that move, and simple geometry already does. Unplanned lead: the longest loop differs across the system messages. | `docs/stage6_protocol.md` |
+| 7. Confirmation | 5 Nov 2026 | Do those patterns hold on 30 fresh emails, and does a neutral quotation behave like the order or like the training note? | Separation replicates, in every email. H0 does not, once the system message only says to summarise. The loop interaction does. Neutral sits between order and training note, so both the lead-in and its wording matter. | `docs/stage7_protocol.md`, ADR 0004 |
+| 8. Write-up | Next | The answer to the goal above. | | Not started |
 
 ## Where the project is on 5 November 2026
 
-Stages 1 to 6 are finished, published in `data/`, and locked by tests. Stage 5 computed the study’s first persistence diagrams, on the 270 last-token vectors saved from stages 1, 2, and 4. Stage 6 computed one diagram per email, from 180 new prefill forwards.
+Stages 1 to 7 are finished, published in `data/`, and locked by tests. Stage 5 computed the study’s first persistence diagrams, on the 270 last-token vectors saved from stages 1, 2, and 4. Stage 6 computed one diagram per email. Stage 7 repeated that comparison on 30 fresh emails, with a neutral quotation added.
 
-Remaining work is about **1 week**, finishing around 12 November 2026:
-
-- Stage 7, confirmation on fresh emails: about 2 to 3 days. Most of it is writing the protocol and the 30 new emails. The forwards take about 20 minutes on this CPU.
-- Stage 8, write-up: about 3 to 4 days.
+Remaining work is the write-up, about **3 to 4 days**, finishing around 9 November 2026. No further forwards are scheduled.
 
 A 3B float32 model is not planned. Its weights are about 12 GB, and this machine has 16 GB. A 4-bit copy would fit, but it would change the very vectors being measured.
 
@@ -77,7 +78,11 @@ A 3B float32 model is not planned. Its weights are about 12 GB, and this machine
 | Word | Meaning here |
 | --- | --- |
 | Residual stream | The running list of numbers the model keeps for each word-piece. Each layer adds to it. Here it has 1,536 numbers per word-piece. |
-| Last email token | The final word-piece of the email, before the model writes anything. Most measurements are read here. |
+| Last email token | In stages 1 to 4, the final word-piece of the whole user message, attack sentence included, before the model writes anything. The probe and the centroid distance are read here. |
+| Email tokens | In stages 6 and 7, the word-pieces of the email body only. The attack sentence and any lead-in are not included. |
+| Prefill | A forward that reads the prompt and saves states, and does not write a reply. Stage 6, and the shape half of stage 7, are prefills. A generation forward is the one that produces the reply used for obedience. |
+| Longest loop | The H1 bar whose death minus birth is the largest. |
+| Sign-flip test | The paired test from stage 6 on. Each email’s difference is multiplied by +1 or −1, 999 times. It is not a shuffle of unpaired labels. |
 | Middle layer, early layer | Transformer block 14 of 28 and block 1. Every pass or fail rule uses the middle layer. The early layer is printed for comparison and never changes a decision. |
 | Gate closed | The October rule for adopting homology as the obedience detector was not met. It does not mean a test passed. |
 | Spacing statistic | A non-topological summary of a cloud: the spread of its pairwise distances. It is the baseline a topology result is compared with. |
@@ -92,7 +97,8 @@ A 3B float32 model is not planned. Its weights are about 12 GB, and this machine
 | AUROC | 1.0 means a score ranks every positive above every negative. 0.5 is chance. |
 | Gate | The rule in `src/specificity/gates.py`, fixed before the October run, that decides whether homology becomes the obedience detector. |
 | Persistence diagram, H0, H1 | See the plain-terms section above. |
-| Permutation test | Shuffle the labels many times, recompute the statistic, and see how often chance does as well as the real labels. |
+| Permutation test | Stage 5’s version: swap the two labels inside each base email, many times. Stages 6 and 7 use the sign-flip test instead, because each email already contributes a paired difference. |
+| Neutral quotation | Stage 7’s third copy of an email. The attack sentence is quoted after a note that says it was copied from an older message, and does not say whether to follow it. |
 | ADR | Architectural decision record, in `docs/adr/`. One page per real choice. |
 
 ## How the work is kept honest
