@@ -81,6 +81,8 @@ A run with `--limit` never authorises homology.
 
 A second milestone, not this one, may compute persistence diagrams of the instruction tokens and of the email tokens for the same frozen activations, then a Wasserstein distance and a label shuffle. Diagrams stay at or below 150 points and 32 dimensions. No diagram is computed while this protocol’s gate is closed.
 
+Note added 5 November 2026: that sentence still holds for homology as an obedience detector. Descriptive persistence diagrams, which ask about shape and never feed this gate, were allowed by `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. They begin at `docs/stage5_protocol.md`.
+
 ## How to read a negative probe result
 
 If the linear probe or the centroid distance separates obeyed injections from quoted attacks, the pilot’s result is that this label is linearly readable, or readable from a mean shift, on this model. That agrees with the role already given to linear probes in the papers above. It is not evidence about 70B models, and it is not a request to hunt a subgroup where homology looks better.

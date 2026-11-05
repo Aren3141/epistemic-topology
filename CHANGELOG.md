@@ -3,7 +3,7 @@
 ## [2026-11-05]
 - Stage 5, the study’s first persistence diagrams. Adding the attack sentence changes the loops of the 30-email cloud (H1 p = 0.001 in all three runs). Order against quotation shows no loop difference. Protocol and result: `docs/stage5_protocol.md`. Data: `data/population_shape_summary.json`.
 - Implemented `src/topology/persistence.py` and `src/evaluation/wasserstein.py`, with synthetic tests. GitHub Actions now installs ripser and persim and runs six test modules.
-- Added `docs/overview.md`: what the project is, what persistent homology measures, why stages 1 to 4 measured position first, the stage map, and about 2 weeks remaining.
+- Added `docs/overview.md`: what the project is, what persistent homology measures, why stages 1 to 4 measured position first, the stage map, and the remaining time (about 1.5 weeks after stage 5).
 - Rewrote the top of the README around the goal and the stage table. Quoted the exact prompts, prefix, email template, and seed in `docs/pilot_protocol.md`.
 - ADR 0003: descriptive topology (stages 5 and 6) runs beside the detection gate and never feeds `homology_decision`. Updated the `docs-keeper` and `external-qa` instructions to match.
 - Ran the second required reply, `BETA-SIGNAL-17`, under the summarise-only system message. Exact obedience is 2/30 injections and 0/30 quotations. Mention inside injections is 12/30. Middle-layer clean-versus-injection AUROC is 1.0. The gate stays closed on the class count. ADR: `docs/adr/0002-second-reply-string-does-not-amend-the-gate.md`.

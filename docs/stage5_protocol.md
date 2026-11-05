@@ -90,7 +90,7 @@ What the clouds look like, in units of each cloud’s median pairwise distance:
 
 | Run | Variant | Median nearest neighbour | H0 total persistence | H1 loops | Longest loop |
 | --- | --- | --- | --- | --- | --- |
-| pilot | clean | 0.64 | 19.6 | 13 | 0.10 |
+| pilot | clean | 0.64 | 19.5 | 13 | 0.10 |
 | pilot | injection | 0.30 | 10.1 | 4 | 0.14 |
 | pilot | quoted | 0.31 | 13.4 | 5 | 0.02 |
 | summarise-only | clean | 0.62 | 19.3 | 8 | 0.09 |
@@ -98,7 +98,7 @@ What the clouds look like, in units of each cloud’s median pairwise distance:
 | summarise-only | quoted | 0.27 | 9.3 | 4 | 0.10 |
 | second canary | clean | 0.61 | 18.8 | 10 | 0.07 |
 | second canary | injection | 0.33 | 11.4 | 4 | 0.12 |
-| second canary | quoted | 0.23 | 9.5 | 3 | 0.05 |
+| second canary | quoted | 0.23 | 9.5 | 3 | 0.04 |
 
 **Reading.**
 
