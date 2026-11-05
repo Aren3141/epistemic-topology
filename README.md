@@ -82,6 +82,7 @@ PYTHONPATH=. python tests/test_summarise_only.py
 PYTHONPATH=. python tests/test_second_canary.py
 PYTHONPATH=. python tests/test_topology.py
 PYTHONPATH=. python tests/test_population_shape.py
+PYTHONPATH=. python tests/test_token_shape.py
 python run_specificity_pilot.py
 ```
 
