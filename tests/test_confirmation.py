@@ -1,6 +1,9 @@
-"""Stage 7 corpus, tests, and reading rule, checked without the model."""
+"""Stage 7 corpus, tests, reading rule, and the published summary, checked without the model."""
 
+import ast
+import json
 import unittest
+from pathlib import Path
 
 import numpy as np
 
@@ -12,10 +15,13 @@ from src.specificity.held_out import (
     build_held_out_corpus,
     held_out_email,
 )
+from src.topology.stage6 import STATE_TOLERANCE
 from src.topology.stage7 import (
     ADJACENCY,
     BOTH,
     CONFIRMATIONS,
+    CONFIRMED,
+    NOT_CONFIRMED,
     STANCE,
     THRESHOLD,
     UNRESOLVED,
@@ -23,7 +29,12 @@ from src.topology.stage7 import (
     confirmation_differences,
     lead_in_reading,
     sign_flip_test,
+    verdict,
 )
+
+ROOT = Path(__file__).resolve().parents[1]
+SUMMARY = ROOT / "data" / "confirmation_summary.json"
+SCRIPTS = (ROOT / "scripts" / "run_confirmation.py", ROOT / "scripts" / "analyse_confirmation.py")
 
 
 class HeldOutCorpusTests(unittest.TestCase):
@@ -99,6 +110,88 @@ class Stage7RuleTests(unittest.TestCase):
         self.assertEqual(lead_in_reading(0.001, 0.5), STANCE)
         self.assertEqual(lead_in_reading(0.5, 0.001), ADJACENCY)
         self.assertEqual(lead_in_reading(0.5, 0.5), UNRESOLVED)
+
+
+class PublishedConfirmationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.summary = json.loads(SUMMARY.read_text())
+
+    def _per_email(self) -> dict:
+        return {
+            run: {
+                int(b): values
+                for b, values in self.summary["runs"][run]["layers"]["middle"]["normalised"][
+                    "per_email"
+                ].items()
+            }
+            for run in self.summary["runs"]
+        }
+
+    def test_checks_passed_and_nothing_reaches_the_gate(self) -> None:
+        for checks in self.summary["checks"].values():
+            self.assertLessEqual(checks["email_state_difference"], STATE_TOLERANCE)
+            self.assertLessEqual(checks["last_token_difference"], STATE_TOLERANCE)
+        self.assertFalse(self.summary["passes_into_homology_decision"])
+        for script in SCRIPTS:
+            tree = ast.parse(script.read_text())
+            names = {
+                alias.name
+                for node in ast.walk(tree)
+                if isinstance(node, ast.ImportFrom)
+                for alias in node.names
+            } | {
+                node.func.id
+                for node in ast.walk(tree)
+                if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+            }
+            self.assertNotIn("homology_decision", names, script.name)
+
+    def test_behaviour_counts(self) -> None:
+        counts = {
+            run: {v: c["obedience"] for v, c in report["counts"].items()}
+            for run, report in self.summary["behaviour"].items()
+        }
+        self.assertEqual(
+            counts,
+            {
+                "pilot": {"injection": 30, "quoted": 0, "neutral": 0},
+                "summarise_only": {"injection": 1, "quoted": 0, "neutral": 0},
+            },
+        )
+        for report in self.summary["behaviour"].values():
+            for by_variant in report["replies"].values():
+                for row in by_variant.values():
+                    if row["obedience"]:
+                        self.assertTrue(row["contains_canary"])
+
+    def test_confirmations_recompute_from_the_published_statistics(self) -> None:
+        per_email = self._per_email()
+        for test in CONFIRMATIONS:
+            stored = self.summary["confirmations"][test.name]
+            result = sign_flip_test(confirmation_differences(per_email, test), test.alternative)
+            self.assertAlmostEqual(result["observed"], stored["observed"], places=5)
+            self.assertAlmostEqual(result["p_value"], stored["p_value"])
+            self.assertEqual(stored["verdict"], verdict(stored["p_value"]))
+
+    def test_published_verdicts(self) -> None:
+        verdicts = {name: result["verdict"] for name, result in self.summary["confirmations"].items()}
+        not_confirmed = {"h0_summarise_only", "loop_summarise_only"}
+        for test in CONFIRMATIONS:
+            expected = NOT_CONFIRMED if test.name in not_confirmed else CONFIRMED
+            self.assertEqual(verdicts[test.name], expected, test.name)
+        self.assertEqual(self.summary["readings"], {"pilot": BOTH, "summarise_only": BOTH})
+
+    def test_the_neutral_note_sits_between_order_and_training_note(self) -> None:
+        for run, by_email in self._per_email().items():
+            for values in by_email.values():
+                self.assertLess(values["injection"]["separation"], values["neutral"]["separation"], run)
+                self.assertLess(values["neutral"]["separation"], values["quoted"]["separation"], run)
+
+    def test_exploratory_section_is_labelled(self) -> None:
+        exploratory = self.summary["exploratory"]
+        self.assertIn("Not pre-registered", exploratory["note"])
+        self.assertEqual(set(exploratory["run_interactions"]), {"fresh_emails", "october_emails"})
 
 
 if __name__ == "__main__":

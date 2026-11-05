@@ -39,6 +39,7 @@ N_BASES = 30
 REPLIES = Path("results/cache_stage7")
 STATES = Path("results/token_clouds_stage7")
 SUMMARY_PATH = Path("data/confirmation_summary.json")
+STAGE6_SUMMARY = Path("data/token_shape_summary.json")
 FIGURE_PATH = Path("docs/demos/stage7-confirmation/confirmation.png")
 STATISTICS = TOPOLOGY_STATISTICS + GEOMETRY_STATISTICS
 RUN_LABELS = {"pilot": "pilot", "summarise_only": "summarise-only"}
@@ -99,6 +100,28 @@ def behaviour(run: str) -> dict:
             counts[v]["obedience"] += int(record["obedience"])
             counts[v]["contains_canary"] += int(record["contains_canary"])
     return {"counts": counts, "replies": rows}
+
+
+def run_interactions(per_email_by_run: dict) -> dict:
+    """Not pre-registered. Does the order-minus-training-note difference depend on the run?"""
+    report = {}
+    for name in STATISTICS:
+        by_run = {}
+        for run in RUNS:
+            per_email = per_email_by_run[run]
+            by_run[run] = np.array(
+                [
+                    per_email[b]["injection"][name] - per_email[b]["quoted"][name]
+                    for b in sorted(per_email, key=int)
+                ]
+            )
+        interaction = by_run["summarise_only"] - by_run["pilot"]
+        result = sign_flip_test(interaction, "two-sided")
+        result["pilot_mean"] = float(by_run["pilot"].mean())
+        result["summarise_only_mean"] = float(by_run["summarise_only"].mean())
+        result["n_positive"] = int((interaction > 0).sum())
+        report[name] = result
+    return report
 
 
 def plot(per_email: dict, confirmations: dict) -> None:
@@ -207,6 +230,25 @@ def main() -> None:
             summary["confirmations"][f"neutral_vs_quoted_{run}"]["p_value"],
             summary["confirmations"][f"injection_vs_neutral_{run}"]["p_value"],
         )
+    stage6 = json.loads(STAGE6_SUMMARY.read_text())
+    summary["exploratory"] = {
+        "note": "Added after the stage 7 results were seen. Not pre-registered. Two-sided.",
+        "run_interactions": {
+            "fresh_emails": run_interactions(primary),
+            "october_emails": run_interactions(
+                {
+                    run: stage6["runs"][run]["layers"][PRIMARY_LAYER]["normalised"]["per_email"]
+                    for run in RUNS
+                }
+            ),
+        },
+    }
+    for emails, report in summary["exploratory"]["run_interactions"].items():
+        for name, result in report.items():
+            print(
+                f"exploratory {emails:14s} {name:11s} pilot {result['pilot_mean']:+.4f} "
+                f"summarise-only {result['summarise_only_mean']:+.4f} p={result['p_value']:.3f}"
+            )
     summary["elapsed_seconds"] = round(time.time() - started, 1)
     SUMMARY_PATH.write_text(json.dumps(summary, indent=2) + "\n")
     plot(primary, summary["confirmations"])
