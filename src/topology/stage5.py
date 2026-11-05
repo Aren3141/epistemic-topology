@@ -4,7 +4,11 @@ Fixed on 5 November 2026 before any diagram was computed. The prose copy is
 docs/stage5_protocol.md. Nothing here feeds homology_decision.
 """
 
+import numpy as np
+
+from src.evaluation.wasserstein import diagram_distance, spacing_distance
 from src.specificity.gates import PCA_COMPONENTS, SEED
+from src.topology.persistence import normalise_scale, persistence_diagrams
 
 RUNS = {
     "pilot": "results/cache",
@@ -28,6 +32,25 @@ BEYOND_SPACING = "shape differs, beyond spacing"
 WITH_SPACING = "shape differs, spacing already shows it"
 SPACING_ONLY = "spacing differs, topology does not"
 NO_DIFFERENCE = "no shape difference detected"
+
+
+def compare_clouds(
+    left: np.ndarray, right: np.ndarray, normalise: bool = True
+) -> dict[str, float]:
+    """H0 and H1 diagram distances, and the spacing baseline, for two clouds."""
+    if normalise:
+        left = normalise_scale(left)
+        right = normalise_scale(right)
+    left_diagrams = persistence_diagrams(left, max_dimension=max(HOMOLOGY_DIMENSIONS))
+    right_diagrams = persistence_diagrams(right, max_dimension=max(HOMOLOGY_DIMENSIONS))
+    statistics = {
+        f"h{dimension}": diagram_distance(
+            left_diagrams[dimension], right_diagrams[dimension]
+        )
+        for dimension in HOMOLOGY_DIMENSIONS
+    }
+    statistics["spacing"] = spacing_distance(left, right)
+    return statistics
 
 
 def shape_outcome(topology_p_values: dict[int, float], baseline_p_value: float) -> str:
