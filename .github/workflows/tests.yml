@@ -1,0 +1,25 @@
+# Unit tests only. These modules do not load the language model, so the
+# workflow does not install PyTorch or download weights.
+
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install the table-test dependencies
+        run: python -m pip install numpy scikit-learn
+      - name: Run the tests that do not load the model
+        run: |
+          PYTHONPATH=. python tests/test_labels.py
+          PYTHONPATH=. python tests/test_dataset.py
+          PYTHONPATH=. python tests/test_summarise_only.py
+          PYTHONPATH=. python tests/test_second_canary.py

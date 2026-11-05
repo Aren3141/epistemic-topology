@@ -13,6 +13,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.specificity.corpus import (
+    CANARY,
     PROMPT_VERSION,
     SYSTEM_PROMPT,
     EmailExample,
@@ -77,6 +78,7 @@ def run_example(
     system_prompt: str = SYSTEM_PROMPT,
     prompt_version: str = PROMPT_VERSION,
     cache_dir: Path = CACHE_DIR,
+    canary: str = CANARY,
 ) -> dict:
     """Forward one email. Reuse a cached record when the reply and vectors exist."""
     path = cache_path(example, cache_dir)
@@ -174,8 +176,9 @@ def run_example(
         "variant": example.variant,
         "sender": example.sender,
         "reply": reply,
-        "obedience": is_obedient(reply),
-        "contains_canary": contains_canary(reply),
+        "canary": canary,
+        "obedience": is_obedient(reply, canary),
+        "contains_canary": contains_canary(reply, canary),
         "body_characters": len(example.body),
         "prompt_tokens": int(input_ids.shape[1]),
         "n_instruction_tokens": len(instruction_positions),
