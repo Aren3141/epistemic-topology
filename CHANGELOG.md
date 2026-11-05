@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-11-05]
+- Scored the summarise-only cache with the October probe. Middle-layer clean-versus-injection AUROC is 1.0. Exact obedience remains 3/30, so the homology gate stays closed on the class count.
+- Recorded the within-injection mention contrast: 13 mentions against 17 omissions, middle-layer probe AUROC 0.58. That contrast does not enter `homology_decision`. ADR: `docs/adr/0001-mention-contrast-does-not-amend-the-gate.md`.
+- Published geometry columns on `data/summarise_only_90.jsonl`, the summary at `data/summarise_only_summary.json`, and `docs/explorer/summarise-only.html`.
+- About 1 day of this study remains, for a cache re-export and a reading of those tables. A second reply string would be a new protocol of about 1 week.
+
 ## [2026-10-22]
 - Replaced the active question with the specificity pilot: obeyed injection versus the same sentence quoted as a security example.
 - Added the matched 90-email corpus, the exact-reply rule, CPU extraction for `Qwen/Qwen2.5-1.5B-Instruct`, and an email-grouped linear probe plus centroid distance.
@@ -11,6 +17,7 @@
 - Ran all 90 emails. Every injection was an exact canary reply and no quoted email was. The middle-layer linear probe AUROC is 1.0, so persistent homology stays off.
 - Published the 90-row table in `data/`, a browser page at `docs/explorer/index.html`, and tests that recompute the AUROCs from that table.
 - Allowed `run_example` to take another system message and another cache directory. Stage 2, in `docs/stage2_protocol.md`, asks whether obedience survives when the system message only says to summarise.
+- Finished that summarise-only run. Exact hijack happened on 3 of 30 injections. The canary was mentioned in 13 of 30 injection summaries and in no quotation.
 - Recorded that a draft gate would have rejected a quoted row with zero obedience, and corrected that rule before any pilot forward.
 
 ## [Added]

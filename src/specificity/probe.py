@@ -2,6 +2,9 @@
 
 PCA and logistic regression are fit inside each training fold. Base emails
 never appear on both sides of a fold. The centroid distance is not trained.
+
+`mention_within_injection` is a follow-up on the summarise-only cache. It
+holds the attack sentence fixed and is not an input to `homology_decision`.
 """
 
 from typing import Optional
@@ -14,6 +17,12 @@ from sklearn.model_selection import GroupKFold
 from sklearn.preprocessing import StandardScaler
 
 from src.specificity.gates import N_SPLITS, PCA_COMPONENTS, SEED
+
+# The October pilot. `evaluate_layer` uses these unless a caller adds a task.
+PRE_REGISTERED_TASKS = ("clean_vs_injection", "obeyed_vs_quoted")
+# Stage 3. Positives and negatives are both injections, so the attack sentence
+# is present in every row. This score cannot open the homology gate.
+MENTION_WITHIN_INJECTION = "mention_within_injection"
 
 
 def _kept(record: dict, task: str) -> Optional[int]:
@@ -29,6 +38,10 @@ def _kept(record: dict, task: str) -> Optional[int]:
         if record["variant"] == "quoted" and not record["obedience"]:
             return 0
         return None
+    if task == MENTION_WITHIN_INJECTION:
+        if record["variant"] != "injection":
+            return None
+        return 1 if record["contains_canary"] else 0
     raise ValueError(f"unknown task: {task}")
 
 
@@ -115,9 +128,43 @@ def aligned_oof_probabilities(
     return aligned
 
 
-def evaluate_layer(records: list[dict], layer_name: str) -> dict:
+def task_probabilities(
+    records: list[dict], layer_name: str, task: str
+) -> list[float | None]:
+    """Out-of-fold positive-class probability for every record. None if excluded."""
+    features = []
+    labels = []
+    groups = []
+    indexes = []
+    for index, record in enumerate(records):
+        label = task_label(record, task)
+        if label is None:
+            continue
+        features.append(record["layers"][layer_name]["last_document"])
+        labels.append(label)
+        groups.append(record["base_id"])
+        indexes.append(index)
+    scores: list[float | None] = [None] * len(records)
+    if not indexes:
+        return scores
+    aligned = aligned_oof_probabilities(
+        np.array(features, dtype=np.float64),
+        np.array(labels, dtype=np.int64),
+        np.array(groups, dtype=np.int64),
+    )
+    for local, index in enumerate(indexes):
+        value = float(aligned[local])
+        scores[index] = None if not np.isfinite(value) else value
+    return scores
+
+
+def evaluate_layer(
+    records: list[dict],
+    layer_name: str,
+    tasks: tuple[str, ...] = PRE_REGISTERED_TASKS,
+) -> dict:
     report = {}
-    for task in ("clean_vs_injection", "obeyed_vs_quoted"):
+    for task in tasks:
         rows = _select(records, layer_name, task)
         unique_groups = len(np.unique(rows["groups"])) if len(rows["groups"]) else 0
         if unique_groups < N_SPLITS or len(rows["labels"]) == 0:

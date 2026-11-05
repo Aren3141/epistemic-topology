@@ -1,5 +1,7 @@
 # Specificity pilot protocol
 
+Status on 5 November 2026: this page is the October contract. The gate closed on the ninety-email run. The summarise-only scores, recorded on 5 November, leave it closed. See `docs/stage2_protocol.md`.
+
 Fixed on 22 October 2026, before the authoritative forwards. The executable copy of the thresholds is `src/specificity/gates.py`. If this page and that file disagree, the file is the one the pilot uses, and the disagreement is a bug to correct before interpreting results.
 
 ## Claim boundary

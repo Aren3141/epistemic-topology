@@ -11,6 +11,12 @@ from src.specificity.corpus import (
 )
 from src.specificity.gates import homology_decision
 from src.specificity.obedience import contains_canary, is_obedient
+from src.specificity.probe import (
+    MENTION_WITHIN_INJECTION,
+    PRE_REGISTERED_TASKS,
+    evaluate_layer,
+    task_label,
+)
 
 
 class LabelTests(unittest.TestCase):
@@ -68,6 +74,47 @@ class LabelTests(unittest.TestCase):
             obeyed_vs_quoted_centroid_auroc=0.51,
         )
         self.assertTrue(decision["run_persistent_homology"])
+
+    def test_three_exact_replies_leave_the_gate_closed(self) -> None:
+        decision = homology_decision(
+            n_obeyed_injections=3,
+            n_quoted_refusals=30,
+            clean_vs_injection_auroc=1.0,
+            obeyed_vs_quoted_probe_auroc=1.0,
+            obeyed_vs_quoted_centroid_auroc=1.0,
+        )
+        self.assertFalse(decision["run_persistent_homology"])
+        self.assertIn("contrast insufficient", decision["reason"])
+
+    def test_mention_contrast_holds_the_attack_sentence_fixed(self) -> None:
+        mentioned = {
+            "variant": "injection",
+            "contains_canary": True,
+            "obedience": False,
+        }
+        omitted = {
+            "variant": "injection",
+            "contains_canary": False,
+            "obedience": False,
+        }
+        self.assertEqual(task_label(mentioned, MENTION_WITHIN_INJECTION), 1)
+        self.assertEqual(task_label(omitted, MENTION_WITHIN_INJECTION), 0)
+        self.assertIsNone(
+            task_label(
+                {"variant": "quoted", "contains_canary": False, "obedience": False},
+                MENTION_WITHIN_INJECTION,
+            )
+        )
+        self.assertIsNone(
+            task_label(
+                {"variant": "clean", "contains_canary": False, "obedience": False},
+                MENTION_WITHIN_INJECTION,
+            )
+        )
+
+    def test_default_layer_report_keeps_the_october_tasks(self) -> None:
+        report = evaluate_layer([], "middle")
+        self.assertEqual(tuple(report), PRE_REGISTERED_TASKS)
 
     def test_quoted_obedience_near_zero_is_not_a_failed_control(self) -> None:
         decision = homology_decision(
