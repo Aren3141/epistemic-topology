@@ -154,3 +154,7 @@ class SecondCanaryTableTests(unittest.TestCase):
         recomputed = float(roc_auc_score(labels, scores))
         published = self.summary["layers"]["middle"]["mention_within_injection"]["probe_auroc"]
         self.assertAlmostEqual(recomputed, published, places=6)
+
+
+if __name__ == "__main__":
+    unittest.main()
