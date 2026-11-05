@@ -1,6 +1,7 @@
 # Changelog
 
 ## [2026-11-05]
+- Stage 8, the written answer: `docs/answer.md`. Position already detects obedience under the quote rule. Shape tracks the sentence and its framing. The fresh-email loop result is an interaction between system messages, not a detector of refusal. No further forwards are scheduled.
 - Stage 7, confirmation on 30 fresh emails with a neutral quotation. Separation replicates in every email. H0 does not replicate under the summarise-only system message. The loop interaction does. Both the quoting lead-in and its wording move the sentence. Protocol and result: `docs/stage7_protocol.md`. Data: `data/confirmation_summary.json`.
 - Corrected the stage 6 gap wording. The median gap is 4.8, 6.6, and 7.9 percent of the quotation’s separation, not “5 to 8 percent of the typical distance”. The longest-loop lead is no longer described as the only place the runs disagree.
 - About 3 to 4 days remain, to around 9 November 2026, for the write-up. No further forwards are scheduled.

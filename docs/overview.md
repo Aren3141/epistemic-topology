@@ -10,7 +10,7 @@ A language model turns every piece of text it reads into long lists of numbers, 
 
 Find out whether the shape of the model’s internal states, measured with persistent homology, says anything about obedience to a hidden instruction that simpler measurements of position do not already say.
 
-The project ends with a short written answer to that question, for this model and these emails, with every number traceable to a file in `data/`.
+The project ends with a short written answer to that question, for this model and these emails, with every number traceable to a file in `data/`. That answer is `docs/answer.md`.
 
 ## Topological data analysis, in plain terms
 
@@ -63,15 +63,13 @@ Stage 7 repeated the comparison on 30 new emails, and added a third copy: the at
 | 5. Population shape | 5 Nov 2026 | Do clean, injected, and quoted emails form clouds of different shape, once location is set aside? | Yes for clean against injection: loops differ at p = 0.001 in all three runs. No loop difference for order against quotation. Simpler spacing statistics also see most of it. | `docs/stage5_protocol.md`, ADR 0003 |
 | 6. Token-cloud shape | 5 Nov 2026 | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Yes, slightly and in every email: the order sits closer to its email. Topology sees that move, and simple geometry already does. Unplanned lead: the longest loop differs across the system messages. | `docs/stage6_protocol.md` |
 | 7. Confirmation | 5 Nov 2026 | Do those patterns hold on 30 fresh emails, and does a neutral quotation behave like the order or like the training note? | Separation replicates, in every email. H0 does not, once the system message only says to summarise. The loop interaction does. Neutral sits between order and training note, so both the lead-in and its wording matter. | `docs/stage7_protocol.md`, ADR 0004 |
-| 8. Write-up | Next | The answer to the goal above. | | Not started |
+| 8. Write-up | 5 Nov 2026 | The answer to the goal above. | Position already detects obedience when the system message states the rule. Shape tracks the sentence and its framing. The one fresh-email topological result is a loop interaction between system messages, not a detector of refusal. | `docs/answer.md` |
 
 ## Where the project is on 5 November 2026
 
-Stages 1 to 7 are finished, published in `data/`, and locked by tests. Stage 5 computed the study’s first persistence diagrams, on the 270 last-token vectors saved from stages 1, 2, and 4. Stage 6 computed one diagram per email. Stage 7 repeated that comparison on 30 fresh emails, with a neutral quotation added.
+Stages 1 to 8 are finished. The measurements are published in `data/` and locked by tests. The answer to the goal is `docs/answer.md`.
 
-Remaining work is the write-up, about **3 to 4 days**, finishing around 9 November 2026. No further forwards are scheduled.
-
-A 3B float32 model is not planned. Its weights are about 12 GB, and this machine has 16 GB. A 4-bit copy would fit, but it would change the very vectors being measured.
+No further forwards are scheduled. A 3B float32 model is not planned. Its weights are about 12 GB, and this machine has 16 GB. A 4-bit copy would fit, but it would change the very vectors being measured.
 
 ## Words used in this repository
 
