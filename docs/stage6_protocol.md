@@ -88,3 +88,50 @@ Prior expectation, written down so it can be wrong: the quotation’s sentence f
 - It does not compare obeyed against unobeyed injections inside the summarise-only runs, where only 3 and 2 were obeyed.
 - It does not change `src/specificity/gates.py` or call `homology_decision`.
 - It does not store raw token states in `data/`. The published summary keeps per-email statistics and p-values.
+
+## Result
+
+Run on 5 November 2026. The protocol and `src/topology/stage6.py` were pushed first (commit `6095554`). The two scripts followed (commit `3fe4ba2`), before any statistic was computed. `scripts/extract_token_clouds.py` took 118 seconds on CPU. Every check passed with a difference of exactly zero: the email-token states were bit-for-bit identical in the two variants, and the last-token vectors matched the stage 1, 2, and 4 caches. `scripts/run_token_shape.py` took about 1 second. Summary: `data/token_shape_summary.json`.
+
+![Stage 6 example email](demos/stage6-token-shape/example_email.png)
+
+The figure shows one email in the pilot run. Grey points are the email’s own tokens. Red points are the 15 tokens of the attack sentence, joined in reading order. The sentence traces almost the same path whether it is an order (left) or a quotation (right). The persistence diagrams underneath are almost the same too. The differences below are small and consistent rather than large.
+
+Middle layer, scale-normalised, 999 sign flips. A topology test passes at p ≤ 0.0056. Geometry differs at p ≤ 0.0083. Medians are order / quotation. “Order larger” counts the emails, out of 30, where the order’s value is the larger one.
+
+| Run | Statistic | Medians | Order larger | p |
+| --- | --- | --- | --- | --- |
+| pilot | H0 total | 27.47 / 27.20 | 29 | **0.001** |
+| pilot | H1 total | 0.44 / 0.45 | 11 | 0.298 |
+| pilot | H1 longest loop | 0.111 / 0.107 | 23 | 0.409 |
+| pilot | separation | 0.578 / 0.606 | 0 | **0.001** |
+| pilot | attachment | 0.936 / 0.919 | 22 | **0.001** |
+| summarise-only | H0 total | 27.79 / 27.73 | 21 | **0.003** |
+| summarise-only | H1 total | 0.45 / 0.54 | 6 | **0.003** |
+| summarise-only | H1 longest loop | 0.153 / 0.105 | 27 | **0.001** |
+| summarise-only | separation | 0.537 / 0.578 | 0 | **0.001** |
+| summarise-only | attachment | 0.896 / 0.905 | 10 | 0.038 |
+| second canary | H0 total | 28.08 / 28.01 | 29 | **0.001** |
+| second canary | H1 total | 0.52 / 0.51 | 23 | **0.005** |
+| second canary | H1 longest loop | 0.239 / 0.114 | 30 | **0.001** |
+| second canary | separation | 0.520 / 0.567 | 0 | **0.001** |
+| second canary | attachment | 0.893 / 0.899 | 13 | 0.099 |
+
+Outcome in all three runs: **shape differs, geometry already shows it.**
+
+![Stage 6 paired statistics](demos/stage6-token-shape/paired_statistics.png)
+
+One dot per email. The grey line is “no difference”. Points below it in the separation column mean the order sits closer to its email than the quotation does.
+
+**Reading.**
+
+1. **Framing moves the sentence, in every email.** In all three runs, and in all 30 emails of each, the attack sentence’s tokens sit closer to the rest of the email when the sentence is an order than when it is a quotation. The gap is 5 to 8 percent of the typical distance. Under the protocol’s readings, that is “all three runs differ in the same direction”: the token-level geometry tracks framing, whether or not the model then obeys.
+2. **Topology passes, but geometry got there first.** H0 total persistence is larger for the order in every run: the cloud takes a little more merging to join up. That is what a sentence that sits slightly apart from the rest looks like. Loops and clusters register the same move that the plain distance between means already shows. So by the rule, topology adds nothing beyond geometry at this scale.
+3. **Not pre-registered: loops differ only where the model does not obey.** In the two summarise-only runs, the longest loop is clearly larger for the order (27 and 30 of 30 emails; medians 0.15 against 0.11 and 0.24 against 0.11). In the pilot, where every order was obeyed, it is not (p = 0.41). The protocol did not set up a test between runs, so this is an observation and not a finding. It is the only place in stages 5 and 6 where topology behaves differently from geometry across conditions. Confirming it needs emails the pattern was not seen on.
+4. **A caveat on “framing”.** In the quotation, the sentence comes right after the training note (“…must not be followed:”), and in the order it comes right after the email. The model reads left to right, so what directly precedes the sentence differs, not only its stance. This stage cannot separate the two. A quotation with a neutral lead-in would.
+
+Printed only, not interpreted: the early layer shows the same separation direction (p = 0.001 in each run). Without scale normalisation, separation still differs at p = 0.001 in every run.
+
+**What this means for the goal.** Inside one email, the shape of the token cloud does register order against quotation, but only through a move that simple geometry already measures. On this setup, persistent homology has not yet told us anything about obedience that position does not. The one open lead is the loop difference in the runs without the quote rule.
+
+**Limits.** 30 emails per run, all synthetic and built on one template. One model. One layer is primary. The effects are small and consistent because pairing removes everything except the sentence. A difference in shape is a description of the states. It is not a detector, and it does not enter `homology_decision`.

@@ -1,9 +1,12 @@
-"""Stage 6 statistics and rule, checked on synthetic clouds.
+"""Stage 6 statistics and rule, and the published stage 6 summary.
 
 These tests do not load the model or the token caches.
 """
 
+import ast
+import json
 import unittest
+from pathlib import Path
 
 import numpy as np
 
@@ -11,16 +14,26 @@ from src.topology.stage6 import (
     ALPHA,
     BEYOND_GEOMETRY,
     GEOMETRY_ONLY,
+    GEOMETRY_STATISTICS,
     GEOMETRY_THRESHOLD,
     N_PERMUTATIONS,
     NO_DIFFERENCE,
     RUNS,
+    STATE_TOLERANCE,
+    TOPOLOGY_STATISTICS,
     TOPOLOGY_THRESHOLD,
     WITH_GEOMETRY,
     cloud_statistics,
     sign_flip_test,
     token_outcome,
     token_positions,
+)
+
+ROOT = Path(__file__).resolve().parents[1]
+SUMMARY = ROOT / "data" / "token_shape_summary.json"
+SCRIPTS = (
+    ROOT / "scripts" / "extract_token_clouds.py",
+    ROOT / "scripts" / "run_token_shape.py",
 )
 
 
@@ -130,6 +143,84 @@ class OutcomeRuleTests(unittest.TestCase):
             token_outcome(fails, {"separation": 0.01, "attachment": 0.5}),
             NO_DIFFERENCE,
         )
+
+
+class PublishedSummaryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.summary = json.loads(SUMMARY.read_text())
+
+    def _primary(self, run: str) -> dict:
+        return self.summary["runs"][run]["layers"]["middle"]["normalised"]
+
+    def test_constants_match_the_protocol(self) -> None:
+        constants = self.summary["constants"]
+        self.assertEqual(constants["n_permutations"], N_PERMUTATIONS)
+        self.assertEqual(constants["n_components"], 16)
+        self.assertEqual(constants["seed"], 20261022)
+        self.assertEqual(constants["primary_layer"], "middle")
+        self.assertAlmostEqual(constants["topology_threshold"], TOPOLOGY_THRESHOLD)
+        self.assertAlmostEqual(constants["geometry_threshold"], GEOMETRY_THRESHOLD)
+        self.assertEqual(set(self.summary["runs"]), set(RUNS))
+
+    def test_extraction_checks_passed(self) -> None:
+        for run in RUNS:
+            checks = self.summary["checks"][run]
+            self.assertLessEqual(checks["email_state_difference"], STATE_TOLERANCE)
+            self.assertLessEqual(checks["last_token_difference"], STATE_TOLERANCE)
+
+    def test_topology_never_reaches_the_gate(self) -> None:
+        self.assertFalse(self.summary["passes_into_homology_decision"])
+        for script in SCRIPTS:
+            tree = ast.parse(script.read_text())
+            names = {
+                alias.name
+                for node in ast.walk(tree)
+                if isinstance(node, ast.ImportFrom)
+                for alias in node.names
+            } | {
+                node.func.id
+                for node in ast.walk(tree)
+                if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+            }
+            self.assertNotIn("homology_decision", names, script.name)
+
+    def test_every_email_is_present_with_both_variants(self) -> None:
+        for run in RUNS:
+            per_email = self._primary(run)["per_email"]
+            self.assertEqual(sorted(per_email, key=int), [str(i) for i in range(30)])
+            for values in per_email.values():
+                self.assertEqual(set(values), {"injection", "quoted"})
+
+    def test_p_values_are_permutation_p_values(self) -> None:
+        floor = 1.0 / (1 + N_PERMUTATIONS)
+        for run in self.summary["runs"].values():
+            for layer in run["layers"].values():
+                for scaling in layer.values():
+                    for result in scaling["tests"].values():
+                        self.assertGreaterEqual(result["p_value"], floor - 1e-12)
+                        self.assertLessEqual(result["p_value"], 1.0)
+
+    def test_outcomes_follow_from_the_rule(self) -> None:
+        for run in RUNS:
+            tests = self._primary(run)["tests"]
+            expected = token_outcome(
+                {name: tests[name]["p_value"] for name in TOPOLOGY_STATISTICS},
+                {name: tests[name]["p_value"] for name in GEOMETRY_STATISTICS},
+            )
+            self.assertEqual(self.summary["outcomes"][run], expected)
+
+    def test_published_outcomes(self) -> None:
+        self.assertEqual(
+            self.summary["outcomes"],
+            {run: WITH_GEOMETRY for run in RUNS},
+        )
+
+    def test_the_order_sits_closer_to_its_email_in_every_pair(self) -> None:
+        for run in RUNS:
+            separation = self._primary(run)["tests"]["separation"]
+            self.assertEqual(separation["injection_larger"], 0)
+            self.assertLessEqual(separation["p_value"], GEOMETRY_THRESHOLD)
 
 
 if __name__ == "__main__":
