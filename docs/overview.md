@@ -29,7 +29,13 @@ A linear probe asks where the points are. It draws a flat boundary through the s
 
 They did not fail. Under the system message that states the quote rule, the probe separated obeyed injections from quotations with AUROC 1.0. When that rule was removed, the model almost never obeyed, so there were too few obeyed emails to compare. The gate answered its question both times: for **detecting obedience**, position is enough on this setup.
 
-That leaves the question the project is named for. The probe shows that an injected email lands somewhere else. It does not say whether the cloud of injected emails has a different shape. Persistent homology is the tool for that, and it is the next stage. The gate is not reopened for it. ADR 0003 records how a descriptive shape result is kept separate from the detection gate.
+That leaves the question the project is named for. The probe shows that an injected email lands somewhere else. It does not say whether the cloud of injected emails has a different shape. Persistent homology is the tool for that, and stage 5 is the first stage that uses it. The gate is not reopened for it. ADR 0003 records how a descriptive shape result is kept separate from the detection gate.
+
+## The first topology result
+
+![Stage 5 persistence diagrams](demos/stage5-population-shape/diagrams.png)
+
+Each panel is one cloud of 30 emails, with location and size removed. Blue dots are clusters merging (H0). Orange triangles are loops (H1). Clean emails, on the left, are spread evenly and leave many small loops. With the attack sentence added, as an order or as a quotation, the cloud becomes clumpier and most of those loops disappear. A permutation test finds that loop difference at p = 0.001 in all three runs. Order against quotation shows no loop difference in any run, even in the pilot, where every order was obeyed and no quotation was. So far, shape tracks whether the sentence is there, not what the model does with it. Full numbers: `docs/stage5_protocol.md`.
 
 ## The stages so far
 
@@ -40,17 +46,16 @@ That leaves the question the project is named for. The probe shows that an injec
 | 2. Summarise-only | 4–5 Nov 2026 | Does obedience survive when the system message only says “summarise”? | Rarely. 3/30 exact replies. Clean versus injection still AUROC 1.0. Gate closed on the count. | `docs/stage2_protocol.md` |
 | 3. Mention contrast | 5 Nov 2026 | Inside injections, can the state predict whether the reply will mention the code? | Barely. AUROC 0.58. Kept out of the gate. | `docs/stage3_protocol.md`, ADR 0001 |
 | 4. Second reply string | 5 Nov 2026 | Is the drop in obedience specific to `ALPHA-OVERRIDE-41`? | No. `BETA-SIGNAL-17` was exact on 2/30. Gate closed. | `docs/stage4_protocol.md`, ADR 0002 |
-| 5. Population shape | 5 Nov 2026, next | Do clean, injected, and quoted emails form clouds of different shape, once location is set aside? | Protocol fixed before it is run. | `docs/stage5_protocol.md`, ADR 0003 |
-| 6. Token-cloud shape | Planned | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Needs a new forward that saves every email token at the middle layer. | Not started |
+| 5. Population shape | 5 Nov 2026 | Do clean, injected, and quoted emails form clouds of different shape, once location is set aside? | Yes for clean against injection: loops differ at p = 0.001 in all three runs. No loop difference for order against quotation. Simpler spacing statistics also see most of it. | `docs/stage5_protocol.md`, ADR 0003 |
+| 6. Token-cloud shape | Next | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Needs a new forward that saves every email token at the middle layer. | Not started |
 | 7. Write-up | Planned | The answer to the goal above. | | Not started |
 
 ## Where the project is on 5 November 2026
 
-Stages 1 to 4 are finished, published in `data/`, and locked by tests. Persistent homology has not yet been computed on any vector in this study. Stage 5 is the first stage that does, on the 270 last-token vectors already saved from stages 1, 2, and 4.
+Stages 1 to 5 are finished, published in `data/`, and locked by tests. Stage 5 computed the study’s first persistence diagrams, on the 270 last-token vectors saved from stages 1, 2, and 4.
 
-Remaining work is about **2 weeks**, finishing around 19 November 2026:
+Remaining work is about **1.5 weeks**, finishing around 16 November 2026:
 
-- Stage 5, population shape: about 1 day. The vectors are already cached. No model forward is needed.
 - Stage 6, token-cloud shape: about 1 week. It needs one new 90-email forward (about eight minutes on this CPU) that saves every email-token vector, then a protocol, diagrams, and a permutation test.
 - Stage 7, write-up: about 3 to 4 days.
 

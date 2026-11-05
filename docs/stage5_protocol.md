@@ -71,4 +71,44 @@ A null outcome is a result. With 30 points per cloud, loops may be few and short
 
 ## Result
 
-Filled in after `scripts/run_population_shape.py` writes `data/population_shape_summary.json`.
+Run on 5 November 2026, after this protocol and `src/topology/stage5.py` were pushed (commit `d8557cf`). `scripts/run_population_shape.py` took about 15 seconds on CPU. Summary: `data/population_shape_summary.json`. Figure: `docs/demos/stage5-population-shape/diagrams.png`.
+
+![Stage 5 persistence diagrams](demos/stage5-population-shape/diagrams.png)
+
+Middle layer, scale-normalised, 999 paired permutations. A topology test passes at p ≤ 0.0042. The baseline threshold for “spacing differs” is p ≤ 0.0083.
+
+| Run | Comparison | H0 p | H1 p | Spacing p | Outcome |
+| --- | --- | --- | --- | --- | --- |
+| pilot | clean vs injection | 0.027 | **0.001** | 0.035 | shape differs, spacing already shows it |
+| pilot | injection vs quoted | 0.258 | 0.563 | 0.008 | spacing differs, topology does not |
+| summarise-only | clean vs injection | 0.047 | **0.001** | 0.117 | shape differs, beyond spacing |
+| summarise-only | injection vs quoted | **0.003** | 0.093 | 0.001 | shape differs, spacing already shows it |
+| second canary | clean vs injection | 0.040 | **0.001** | 0.010 | shape differs, spacing already shows it |
+| second canary | injection vs quoted | 0.049 | 0.323 | 0.006 | spacing differs, topology does not |
+
+What the clouds look like, in units of each cloud’s median pairwise distance:
+
+| Run | Variant | Median nearest neighbour | H0 total persistence | H1 loops | Longest loop |
+| --- | --- | --- | --- | --- | --- |
+| pilot | clean | 0.64 | 19.6 | 13 | 0.10 |
+| pilot | injection | 0.30 | 10.1 | 4 | 0.14 |
+| pilot | quoted | 0.31 | 13.4 | 5 | 0.02 |
+| summarise-only | clean | 0.62 | 19.3 | 8 | 0.09 |
+| summarise-only | injection | 0.34 | 11.3 | 4 | 0.24 |
+| summarise-only | quoted | 0.27 | 9.3 | 4 | 0.10 |
+| second canary | clean | 0.61 | 18.8 | 10 | 0.07 |
+| second canary | injection | 0.33 | 11.4 | 4 | 0.12 |
+| second canary | quoted | 0.23 | 9.5 | 3 | 0.05 |
+
+**Reading.**
+
+1. **The attack sentence changes the shape of the cloud.** With location and size removed, clean emails are spread evenly: each one’s nearest neighbour sits at about 0.6 of the typical distance, which leaves many small, short-lived loops. Once the sentence is appended, nearest neighbours are about half as far away. The cloud is clumpier, most small loops fill in, and the one that survives is larger. The loop statistic detects this at p = 0.001, the smallest value 999 permutations can give, in all three runs.
+2. **Mostly, simpler geometry sees it too.** In the pilot and second-canary runs the pairwise-distance statistic also differs at p < 0.05, so topology agrees with geometry there rather than finding something new. In the summarise-only run only topology clears its threshold, and the rule labels that comparison “beyond spacing”. Across the three runs the loop statistic is the strongest and most consistent signal for clean against injection. It is not evidence that topology sees something geometry cannot.
+3. **Order against quotation: no loop difference.** H1 p-values are 0.56, 0.09, and 0.32. In the pilot every injection was obeyed and no quotation was, and the linear probe separates them perfectly by position. Shape does not. At the population level, the shape tracks whether the sentence is present, not how it is framed or whether it is obeyed. That matches stage 3, where the state barely predicted whether a reply would mention the code.
+4. **One isolated quoted email.** In all three runs the most isolated quoted state is base email 28, the “translation pass” email, which asks the reader to mark sentences that changed meaning. It is the off-scale H0 bar in the figure. This is a description, not a test.
+
+Printed only, not interpreted: the early layer gives H1 p = 0.002 for clean against injection in each run. The unscaled clouds differ on almost every statistic, as expected when size is left in.
+
+**What this means for the goal.** At the level of 30-email clouds, persistent homology adds no information about obedience beyond position. It confirms, with a different instrument, that the attack sentence reshapes the states. Stage 6 asks the same question inside a single email, where the cloud is the email’s own word-pieces.
+
+**Limits.** Thirty points per cloud. The loops are small, at most 0.24 of the median distance, so the test is on whole diagrams rather than on any single loop. One model, one layer that decides, one set of synthetic emails. A difference in shape is a description of the states. It is not a detector, and it does not enter `homology_decision`.

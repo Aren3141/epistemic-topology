@@ -1,6 +1,6 @@
 # Research Log & Architectural Anomalies
 
-Status on 5 November 2026: stages 1 to 4 are recorded, and the detection gate stays closed. Stage 5, the first persistence diagrams of this study, is next, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. About 2 weeks remain, to around 19 November 2026: stage 5 (about 1 day), stage 6 token clouds (about 1 week), and the write-up (3 to 4 days). The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
+Status on 5 November 2026: stages 1 to 5 are recorded, and the detection gate stays closed. Stage 5 computed the study’s first persistence diagrams, under `docs/adr/0003-descriptive-topology-is-separate-from-the-gate.md`. About 1.5 weeks remain, to around 16 November 2026: stage 6 token clouds (about 1 week) and the write-up (3 to 4 days). The stage map is in `docs/overview.md`. A 3B float32 check is not scheduled on this 16 GB machine. The June entries below are the historical baseline, kept as written.
 
 ## [2026-06-19] PyTorch MPS Backend (Apple Silicon) Matrix Corruption
 **Phase:** 0 (Extraction Reality Check)
@@ -158,5 +158,17 @@ The two exact replies are base emails 10 and 23. No reply contains `ALPHA-OVERRI
 
 **Documentation.** `docs/overview.md` now explains the project, the tools, the stage map, and the remaining time to someone new. The exact system messages, training-note prefix, email template, and seed are quoted in `docs/pilot_protocol.md`, which closes four of the newcomer questions in `docs/qa_log.md`.
 
-**Timeframe.** About 2 weeks, to around 19 November 2026.
+**Timeframe.** About 2 weeks, to around 19 November 2026. Stage 5 finished the same evening; see the next entry.
+
+## [2026-11-05] Stage 5, population shape
+
+**Pre-registration.** `docs/stage5_protocol.md` and `src/topology/stage5.py` were pushed in commit `d8557cf` before any diagram was computed. The topology code and its synthetic tests followed in `add7483`. The run came after both.
+
+**Setup.** The 270 cached last-email-token vectors from the pilot, summarise-only, and second-canary runs. Each variant is a 30-point cloud: own mean removed, standardised, 16 principal components fit once on the pooled centred vectors, then scaled to median pairwise distance 1. Rips diagrams in H0 and H1. Diagrams are compared by 1-Wasserstein distance (L∞ ground metric). Baseline: 1-Wasserstein distance between pairwise-distance distributions. Null: 999 paired swaps within base emails. About 15 seconds on CPU.
+
+**Result, middle layer.** Clean against injection: H1 p = 0.001 in all three runs, below the 0.0042 threshold. The spacing baseline gives p = 0.035, 0.117, and 0.010, so the outcomes are “spacing already shows it”, “beyond spacing”, and “spacing already shows it”. Injection against quoted: H1 p = 0.56, 0.09, and 0.32. Only the summarise-only H0 statistic clears the threshold (p = 0.003), and spacing differs there too.
+
+**Reading.** Clean clouds are evenly spread, with median nearest-neighbour distance about 0.62 and 8 to 13 small loops. With the attack sentence, nearest neighbours are about 0.3 and only 3 to 5 loops remain. Shape tracks the presence of the sentence, not its framing. In the pilot that holds even though 30 of 30 orders were obeyed and 0 of 30 quotations were, and the probe separates them by position. Base email 28 (“translation pass”) is the most isolated quoted state in all three runs. That is a description, not a test.
+
+**Consequence for the goal.** At the population level, persistent homology adds no obedience information beyond position. Stage 6, token clouds inside each email, is next.
 
