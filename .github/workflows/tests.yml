@@ -28,3 +28,4 @@ jobs:
           PYTHONPATH=. python tests/test_topology.py
           PYTHONPATH=. python tests/test_population_shape.py
           PYTHONPATH=. python tests/test_token_shape.py
+          PYTHONPATH=. python tests/test_confirmation.py

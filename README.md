@@ -84,10 +84,11 @@ PYTHONPATH=. python tests/test_second_canary.py
 PYTHONPATH=. python tests/test_topology.py
 PYTHONPATH=. python tests/test_population_shape.py
 PYTHONPATH=. python tests/test_token_shape.py
+PYTHONPATH=. python tests/test_confirmation.py
 python run_specificity_pilot.py
 ```
 
-GitHub Actions runs those seven test modules on Python 3.13. The workflow installs NumPy, SciPy, scikit-learn, ripser, and persim. It does not download the model. See `.github/workflows/tests.yml`.
+GitHub Actions runs those eight test modules on Python 3.13. The workflow installs NumPy, SciPy, scikit-learn, ripser, and persim. It does not download the model. See `.github/workflows/tests.yml`.
 
 `python tests/test_labels.py` on its own cannot import `src`. The `PYTHONPATH=.` prefix is the command that works. None of the test modules loads the model.
 
