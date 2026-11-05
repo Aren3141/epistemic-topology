@@ -120,6 +120,8 @@ System message: “Summarise the email in two sentences.” Exact obedience was 
 
 **Open gap.** The study measures one canary on one 1.5B model. It cannot yet say whether another fixed reply string would push exact obedience to the gate’s minimum of 8, or move the mention score. The proposed next experiment, not started, repeats the summarise-only system message and the same 30 emails with a different fixed reply string written down before the forwards. Measured quantities would be the exact-reply count, the clean-versus-injection AUROC, and the mention-within-injection AUROC, with the October gate left as it is. That is about 1 week if approved, most of it protocol and checking. The 1.5B CPU forward itself is on the order of the October run. No new string is chosen here.
 
+That proposal was run later on 5 November 2026. See the next entry, Second reply string. The counts and the closed gate are recorded there. This paragraph is unchanged.
+
 **Also left open.** Pull request 2, from 19 June 2026, still proposes a persistent-homology script for the three-sentence PCA baseline. The October gate is closed, and stage 2 did not reopen it. That pull request is outside this study. It conflicts with main and commits bytecode, so it stays unmerged.
 
 ## [2026-11-05] Second reply string
