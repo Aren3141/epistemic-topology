@@ -1,6 +1,8 @@
 # Changelog
 
 ## [2026-11-05]
+- Stage 6, token-cloud shape inside each email. In 30 of 30 emails in all three runs, the attack sentence sits closer to its email as an order than as a quotation. Topology passes in every run, but geometry already shows the difference. Not pre-registered: the longest loop differs only in the two runs where the model did not obey. Protocol and result: `docs/stage6_protocol.md`. Data: `data/token_shape_summary.json`.
+- ADR 0004: confirm the stage 6 leads on 30 fresh emails, with a neutral quotation, before the write-up. The write-up becomes stage 8. About 1 week remains, to around 12 November 2026.
 - Stage 5, the study’s first persistence diagrams. Adding the attack sentence changes the loops of the 30-email cloud (H1 p = 0.001 in all three runs). Order against quotation shows no loop difference. Protocol and result: `docs/stage5_protocol.md`. Data: `data/population_shape_summary.json`.
 - Implemented `src/topology/persistence.py` and `src/evaluation/wasserstein.py`, with synthetic tests. GitHub Actions now installs ripser and persim and runs six test modules.
 - Added `docs/overview.md`: what the project is, what persistent homology measures, why stages 1 to 4 measured position first, the stage map, and the remaining time (about 1.5 weeks after stage 5).

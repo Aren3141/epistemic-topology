@@ -37,6 +37,16 @@ That leaves the question the project is named for. The probe shows that an injec
 
 Each panel is one cloud of 30 emails, with location and size removed. Blue dots are clusters merging (H0). Orange triangles are loops (H1). Clean emails, on the left, are spread evenly and leave many small loops. With the attack sentence added, as an order or as a quotation, the cloud becomes clumpier and most of those loops disappear. A permutation test finds that loop difference at p = 0.001 in all three runs. Order against quotation shows no loop difference in any run, even in the pilot, where every order was obeyed and no quotation was. In one run the clusters (H0) differ between order and quotation, but the simpler spacing statistic sees that too. So far, shape tracks whether the sentence is there, not what the model does with it. Full numbers: `docs/stage5_protocol.md`.
 
+## Inside one email
+
+![Stage 6 example email](demos/stage6-token-shape/example_email.png)
+
+Stage 6 looks inside a single email. Every word-piece has its own state, so one email is a cloud of about 70 points: the email’s own tokens (grey) and the 15 tokens of the attack sentence (red). The model reads left to right, so the grey points are identical whether the sentence is an order or a quotation. Only the red points can move.
+
+They move a little, and always the same way. In every one of the 30 emails, in all three runs, the order sits closer to its email than the quotation does, by 5 to 8 percent of the typical distance. Persistent homology registers that too: the clusters (H0) take slightly longer to merge. But the plain distance between the two groups already shows it, so by the pre-registered rule topology adds nothing new here.
+
+One pattern was not planned. In the two runs where the model almost never obeyed, the longest loop is clearly larger for the order. In the pilot, where it always obeyed, it is not. That is the only place so far where topology and simple geometry part ways across conditions. Stage 7 checks it on fresh emails, along with a quotation whose lead-in does not say “do not follow”, to tell framing apart from what simply comes before the sentence. Full numbers: `docs/stage6_protocol.md`.
+
 ## The stages so far
 
 | Stage | When | Question | Result | Where |
@@ -47,17 +57,18 @@ Each panel is one cloud of 30 emails, with location and size removed. Blue dots 
 | 3. Mention contrast | 5 Nov 2026 | Inside injections, can the state predict whether the reply will mention the code? | Barely. AUROC 0.58. Kept out of the gate. | `docs/stage3_protocol.md`, ADR 0001 |
 | 4. Second reply string | 5 Nov 2026 | Is the drop in obedience specific to `ALPHA-OVERRIDE-41`? | No. `BETA-SIGNAL-17` was exact on 2/30. Gate closed. | `docs/stage4_protocol.md`, ADR 0002 |
 | 5. Population shape | 5 Nov 2026 | Do clean, injected, and quoted emails form clouds of different shape, once location is set aside? | Yes for clean against injection: loops differ at p = 0.001 in all three runs. No loop difference for order against quotation. Simpler spacing statistics also see most of it. | `docs/stage5_protocol.md`, ADR 0003 |
-| 6. Token-cloud shape | Next | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Needs a new forward that saves every email token at the middle layer. | Not started |
-| 7. Write-up | Planned | The answer to the goal above. | | Not started |
+| 6. Token-cloud shape | 5 Nov 2026 | Within one email, does the cloud of word-piece states change shape when the attack sentence is an order rather than a quotation? | Yes, slightly and in every email: the order sits closer to its email. Topology sees it, but simple geometry already does. Unplanned lead: loops differ only in the runs where the model did not obey. | `docs/stage6_protocol.md` |
+| 7. Confirmation | Next | Do the stage 6 patterns hold on 30 fresh emails, and does a neutral quotation behave like the order or like the training note? | | ADR 0004 |
+| 8. Write-up | Planned | The answer to the goal above. | | Not started |
 
 ## Where the project is on 5 November 2026
 
-Stages 1 to 5 are finished, published in `data/`, and locked by tests. Stage 5 computed the study’s first persistence diagrams, on the 270 last-token vectors saved from stages 1, 2, and 4.
+Stages 1 to 6 are finished, published in `data/`, and locked by tests. Stage 5 computed the study’s first persistence diagrams, on the 270 last-token vectors saved from stages 1, 2, and 4. Stage 6 computed one diagram per email, from 180 new prefill forwards.
 
-Remaining work is about **1.5 weeks**, finishing around 16 November 2026:
+Remaining work is about **1 week**, finishing around 12 November 2026:
 
-- Stage 6, token-cloud shape: about 1 week. It needs one new 90-email forward (about eight minutes on this CPU) that saves every email-token vector, then a protocol, diagrams, and a permutation test.
-- Stage 7, write-up: about 3 to 4 days.
+- Stage 7, confirmation on fresh emails: about 2 to 3 days. Most of it is writing the protocol and the 30 new emails. The forwards take about 20 minutes on this CPU.
+- Stage 8, write-up: about 3 to 4 days.
 
 A 3B float32 model is not planned. Its weights are about 12 GB, and this machine has 16 GB. A 4-bit copy would fit, but it would change the very vectors being measured.
 
@@ -70,6 +81,8 @@ A 3B float32 model is not planned. Its weights are about 12 GB, and this machine
 | Middle layer, early layer | Transformer block 14 of 28 and block 1. Every pass or fail rule uses the middle layer. The early layer is printed for comparison and never changes a decision. |
 | Gate closed | The October rule for adopting homology as the obedience detector was not met. It does not mean a test passed. |
 | Spacing statistic | A non-topological summary of a cloud: the spread of its pairwise distances. It is the baseline a topology result is compared with. |
+| Separation, attachment | Stage 6’s geometric baselines. Separation is the distance between the average sentence token and the average email token. Attachment is how far a typical sentence token is from its nearest email token. |
+| Pre-registered | Written down and pushed before the data it is about was computed. A pattern noticed afterwards is reported as an observation and needs new data to confirm. |
 | Canary | The made-up code the hidden order asks for, `ALPHA-OVERRIDE-41` or `BETA-SIGNAL-17`. It cannot appear by accident. |
 | Clean, injection, quoted | The three copies of each email: no order, the order, and the order quoted as a training example. |
 | Obedience | The whole reply is exactly the canary. A summary that mentions the canary does not count. |
